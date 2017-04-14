@@ -23,6 +23,8 @@ namespace Evolution3
             EvoluationContext context = new EvoluationContext();
 
             context.Database.CreateIfNotExists();
+
+            Init.Fill();
         }
     }
 }
