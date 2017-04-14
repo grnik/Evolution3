@@ -7,14 +7,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using DataDB;
 
 namespace Evolution3
 {
-    public partial class Form1 : Form
+    public partial class Main : Form
     {
-        public Form1()
+        public Main()
         {
             InitializeComponent();
+        }
+
+        private void btCreateDB_Click(object sender, EventArgs e)
+        {
+            EvoluationContext context = new EvoluationContext();
+
+            context.Database.CreateIfNotExists();
         }
     }
 }
