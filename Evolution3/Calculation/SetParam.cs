@@ -15,6 +15,18 @@ namespace Calculation
         static List<ReshuffleParam> _reshuffleParams = new List<ReshuffleParam>();
 
         private ReshuffleParam _reshuffleParam;
+
+        /// <summary>
+        /// Число различных вариантов составления набора для данной функции и числа входный параметров.
+        /// </summary>
+        public int CountReshuffle
+        {
+            get
+            {
+                return _reshuffleParam.CountReshuffle;
+            }
+        }
+
         private int _countParamsIncome;
         private IFunction _function;
 
@@ -41,6 +53,11 @@ namespace Calculation
             }
         }
 
+        /// <summary>
+        /// По набору входных параметров создаем наборы для выполнения функции
+        /// </summary>
+        /// <param name="paramsIncome"></param>
+        /// <returns></returns>
         public int[,] GetSet(int[] paramsIncome)
         {
             int countParamsIncome = paramsIncome.Length;
@@ -59,6 +76,11 @@ namespace Calculation
             return res;
         }
 
+        /// <summary>
+        /// Возращает номера индексов входных параметров для указанного индексом набора параметров.
+        /// </summary>
+        /// <param name="indexParamSet"></param>
+        /// <returns></returns>
         public int[] GetIndexIncomeParams(int indexParamSet)
         {
             int[] res = new int[_function.ParamCount];

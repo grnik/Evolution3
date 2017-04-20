@@ -39,5 +39,14 @@ namespace Run
             _results = results;
         }
 
+        /// <summary>
+        /// Запускаем поиск решения
+        /// </summary>
+        public void Search()
+        {
+            Step0 step0 = new Step0();
+
+            step0.Run();
+        }
     }
 }

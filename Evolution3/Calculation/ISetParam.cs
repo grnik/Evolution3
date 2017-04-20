@@ -27,5 +27,10 @@ namespace Calculation
         /// <param name="indexParamSet"></param>
         /// <returns></returns>
         int[] GetIndexIncomeParams(int indexParamSet);
+
+        /// <summary>
+        /// Число различных вариантов составления набора для данной функции и числа входный параметров.
+        /// </summary>
+        int CountReshuffle { get; }
     }
 }

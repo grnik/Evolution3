@@ -28,7 +28,7 @@ namespace Run
         }
 
         /// <summary>
-        /// Для набора входных параметров - возвращаем результат.
+        /// Для наборов входных параметров - возвращаем результат.
         /// </summary>
         /// <param name="inputParams"></param>
         /// <returns></returns>
@@ -52,7 +52,7 @@ namespace Run
         /// <param name="compareResults">Заданные ответы</param>
         /// <param name="inputParams">Все наборы входных параметров</param>
         /// <returns></returns>
-        public double Correlation(int[] compareResults, int[,] inputParams)
+        public double CorrelationWithRun(int[] compareResults, int[,] inputParams)
         {
             int count = inputParams.GetLength(0);
             if (compareResults.Length != count)
@@ -62,6 +62,17 @@ namespace Run
             double res = _calculation.Correlation(compareResults, resultFunc);
 
             return res;
+        }
+
+        /// <summary>
+        /// Сравнения резульатата выполения и заданных результатов. Определение корреляции.
+        /// </summary>
+        /// <param name="compareResults">Заданные ответы</param>
+        /// <param name="resultFunc">Рассчитанные результаты</param>
+        /// <returns></returns>
+        public double Correlation(int[] compareResults, int[] resultFunc)
+        {
+            return _calculation.Correlation(compareResults, resultFunc);
         }
 
         /// <summary>

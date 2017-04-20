@@ -49,9 +49,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FunctionBetterRes.cs" />
     <Compile Include="FunctionSet.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Run.cs" />
+    <Compile Include="Setup.cs" />
+    <Compile Include="Step0.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Calculation\Calculation.csproj">

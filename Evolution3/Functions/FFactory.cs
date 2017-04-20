@@ -32,5 +32,17 @@ namespace Functions
 
             return functions.First(f => f.Key == name).Value;
         }
+
+        public static List<IFunction> AllFunction()
+        {
+            List<IFunction> res = new List<IFunction>();
+
+            res.Add(Create(FunctionName.Minus.ToString()));
+            res.Add(Create(FunctionName.Plus.ToString()));
+            res.Add(Create(FunctionName.Multiplication.ToString()));
+            res.Add(Create(FunctionName.Division.ToString()));
+
+            return res;
+        }
     }
 }
