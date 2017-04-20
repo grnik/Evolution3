@@ -26,5 +26,10 @@ namespace Evolution3
 
             Init.Fill();
         }
+
+        private void btInitDB_Click(object sender, EventArgs e)
+        {
+            EvoluationContext.Init(10);
+        }
     }
 }

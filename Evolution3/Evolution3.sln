@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Testing", "Testing\Testing.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Functions", "Functions\Functions.csproj", "{4D5C8E57-4C01-4D63-8A33-01735C0FAAB8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Run", "Run\Run.csproj", "{D8E8BA79-BF33-40F0-9BF5-729BF288B283}"
+EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True
@@ -43,6 +45,10 @@ Global
 		{4D5C8E57-4C01-4D63-8A33-01735C0FAAB8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4D5C8E57-4C01-4D63-8A33-01735C0FAAB8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4D5C8E57-4C01-4D63-8A33-01735C0FAAB8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D8E8BA79-BF33-40F0-9BF5-729BF288B283}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D8E8BA79-BF33-40F0-9BF5-729BF288B283}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D8E8BA79-BF33-40F0-9BF5-729BF288B283}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D8E8BA79-BF33-40F0-9BF5-729BF288B283}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

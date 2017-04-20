@@ -9,16 +9,28 @@ namespace Functions
     public enum FunctionName { Minus, Plus, Multiplication, Division }
     public static class FFactory
     {
+        private static Dictionary<string, IFunction> functions = new Dictionary<string, IFunction>();
+
         public static IFunction Create(string name)
         {
-            switch (name)
+            if (!functions.ContainsKey(name))
             {
-                case "Minus": return new FMinus();
-                case "Plus": return new FPlus();
-                case "Multiplication": return new FMultiplication();
-                case "Division": return new FDivision();
-                default: throw new ArgumentOutOfRangeException("Неизвестная функция");
+                switch (name)
+                {
+                    case "Minus":
+                        functions.Add(name, new FMinus()); break;
+                    case "Plus":
+                        functions.Add(name, new FPlus()); break;
+                    case "Multiplication":
+                        functions.Add(name, new FMultiplication()); break;
+                    case "Division":
+                        functions.Add(name, new FDivision()); break;
+                    default:
+                        throw new ArgumentOutOfRangeException("Неизвестная функция");
+                }
             }
+
+            return functions.First(f => f.Key == name).Value;
         }
     }
 }

@@ -31,11 +31,11 @@ namespace Testing.Calculation
         public void GetSet(int incomeCount, string functionName)
         {
             IFunction function = FFactory.Create(functionName);
-            ISetParam setParam = new SetParam();
+            ISetParam setParam = new SetParam(function, incomeCount);
 
             int[] incomeArray = GenerateIncomeParam(incomeCount);
 
-            int[,] paramsInts = setParam.GetSet(incomeArray, function);
+            int[,] paramsInts = setParam.GetSet(incomeArray);
 
             int[] countIncome = new int[incomeCount];
             for (int i = 0; i < paramsInts.GetLength(0); i++)

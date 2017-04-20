@@ -14,32 +14,61 @@ namespace Calculation
         /// </summary>
         static List<ReshuffleParam> _reshuffleParams = new List<ReshuffleParam>();
 
-        public int[,] GetSet(int[] paramsIncome, IFunction function)
+        private ReshuffleParam _reshuffleParam;
+        private int _countParamsIncome;
+        private IFunction _function;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="function">Функция, которую будем оценивать</param>
+        /// <param name="countParamsIncome">Количество входных параметров.</param>
+        public SetParam(IFunction function, int countParamsIncome)
         {
+            _function = function;
+            _countParamsIncome = countParamsIncome;
             int countParamsFunction = function.ParamCount;
-            int countParamsIncome = paramsIncome.Length;
             bool commutativity = function.Commutativity;
 
-            ReshuffleParam reshuffleParam = _reshuffleParams.FirstOrDefault(r =>
+            _reshuffleParam = _reshuffleParams.FirstOrDefault(r =>
                 (r.Commutativity == commutativity)
                 && (r.CountParamsFunction == countParamsFunction)
                 && (r.CountParamsIncome == countParamsIncome));
-            if (reshuffleParam == null)
+            if (_reshuffleParam == null)
             {
-                reshuffleParam = new ReshuffleParam(countParamsFunction, countParamsIncome, commutativity);
-                _reshuffleParams.Add(reshuffleParam);
+                _reshuffleParam = new ReshuffleParam(countParamsFunction, countParamsIncome, commutativity);
+                _reshuffleParams.Add(_reshuffleParam);
             }
+        }
 
-            int[,] res = new int[reshuffleParam.CountReshuffle, function.ParamCount];
-            for (int i = 0; i < reshuffleParam.CountReshuffle; i++)
+        public int[,] GetSet(int[] paramsIncome)
+        {
+            int countParamsIncome = paramsIncome.Length;
+            if(countParamsIncome != _countParamsIncome)
+                throw new Exception("Кол-во входных параметров изменилось");
+
+            int[,] res = new int[_reshuffleParam.CountReshuffle, _function.ParamCount];
+            for (int i = 0; i < _reshuffleParam.CountReshuffle; i++)
             {
-                for (int j = 0; j < function.ParamCount; j++)
+                for (int j = 0; j < _function.ParamCount; j++)
                 {
-                    res[i, j] = paramsIncome[reshuffleParam.Reshuffle[i, j]];
+                    res[i, j] = paramsIncome[_reshuffleParam.Reshuffle[i, j]];
                 }
             }
 
             return res;
         }
+
+        public int[] GetIndexIncomeParams(int indexParamSet)
+        {
+            int[] res = new int[_function.ParamCount];
+            for (int i = 0; i < _function.ParamCount; i++)
+            {
+                res[i] = _reshuffleParam.Reshuffle[indexParamSet, i];
+            }
+
+            return res;
+        }
+
     }
 }

@@ -17,11 +17,11 @@ namespace Calculation
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
-        double ICalculation.Correlation(List<int> x, List<int> y)
+        double ICalculation.Correlation(int[] x, int[] y)
         {
-            if(x.Count != y.Count)
+            if(x.Length != y.Length)
                 throw new Exception("При расчете корреляции входные последовательности не равны.");
-            if(x.Count == 0)
+            if(x.Length == 0)
                 throw new Exception("При расчете корреляции входные последовательности пусты.");
 
             int x_ = AvarageValue(x);
@@ -30,7 +30,7 @@ namespace Calculation
             return SumMultAvr(x, x_, y, y_)/Math.Sqrt(SumSquareAvr(x, x_)*SumSquareAvr(y, y_));
         }
 
-        int AvarageValue(List<int> x)
+        int AvarageValue(int[] x)
         {
             int sum = x.Sum(z => z);
 
@@ -45,10 +45,10 @@ namespace Calculation
         /// <param name="y"></param>
         /// <param name="y_"></param>
         /// <returns></returns>
-        int SumMultAvr(List<int> x, int x_, List<int> y, int y_)
+        int SumMultAvr(int[] x, int x_, int[] y, int y_)
         {
             int sum = 0;
-            for (int i = 0; i < x.Count; i++)
+            for (int i = 0; i < x.Length; i++)
             {
                 sum += (x[i] - x_)*(y[i] - y_);
             }
@@ -62,7 +62,7 @@ namespace Calculation
         /// <param name="x"></param>
         /// <param name="x_"></param>
         /// <returns></returns>
-        int SumSquareAvr(List<int> x, int x_)
+        int SumSquareAvr(int[] x, int x_)
         {
             int sum = x.Sum(p => (p - x_)*(p - x_));
 

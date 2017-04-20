@@ -131,11 +131,11 @@ namespace Calculation
             {
                 int[] setParams = new int[CountParamsFunction];
                 setParams[0] = i;
-                PlacementsWithRepetitionsLevel(1, setParams, i);
+                PlacementsWithRepetitionsLevel(1, setParams);
             }
         }
 
-        void PlacementsWithRepetitionsLevel(int level, int[] setParams, int lastIndex)
+        void PlacementsWithRepetitionsLevel(int level, int[] setParams)
         {
             if (level == CountParamsFunction)
             {
@@ -149,7 +149,7 @@ namespace Calculation
             for (int j = 0; j < CountParamsIncome; j++)
             {
                 setParams[level] = j;
-                PlacementsWithRepetitionsLevel(level + 1, setParams, j);
+                PlacementsWithRepetitionsLevel(level + 1, setParams);
             }
         }
 
@@ -160,7 +160,7 @@ namespace Calculation
         /// </summary>
         /// <param name="number"></param>
         /// <returns></returns>
-        long FactN(int number)
+        private long FactN(int number)
         {
             long res = 1;
             for (int i = 2; i <= number; i++)
@@ -177,7 +177,7 @@ namespace Calculation
         /// <param name="start"></param>
         /// <param name="finish"></param>
         /// <returns></returns>
-        long FactDip(int start, int finish)
+        private long FactDip(int start, int finish)
         {
             checked
             {
