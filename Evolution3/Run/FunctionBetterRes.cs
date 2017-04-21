@@ -21,6 +21,7 @@ namespace Run
         /// Ссылка на лучший индекс указывающий на нахождение лучших параметров.
         /// </summary>
         public int BetterIndexReshuffle { get; private set; }
+        public int[] BetterReshuffle { get; private set; }
 
         public FunctionBetterRes(ICalculation calculation, IFunction function, int countParamsIncome)
         {
@@ -61,7 +62,7 @@ namespace Run
             double[] correlation = new double[_setParam.CountReshuffle];
             for (int i = 0; i < _setParam.CountReshuffle; i++)
             {
-                correlation[i] = _functionSet.Correlation(results, GetResultIncomeVariant(resultFuncRunSet, i));
+                correlation[i] = _functionSet.Correlation(results, GetArrayTo2Index(resultFuncRunSet, i));
             }
 
             return ChooseBetterReshuffle(correlation);
@@ -78,11 +79,30 @@ namespace Run
             double res = 0;
             for (int i = 0; i < correlation.Length; i++)
             {
-                if (correlation[i] > res)
+                if (Math.Abs(correlation[i]) > res)
                 {
-                    res = correlation[i];
+                    res = Math.Abs(correlation[i]);
                     BetterIndexReshuffle = i;
                 }
+            }
+            BetterReshuffle = GetArrayTo1Index(_setParam.Reshuffle, BetterIndexReshuffle);
+
+            return res;
+        }
+
+        /// <summary>
+        /// Выбираем один вариант
+        /// </summary>
+        /// <param name="array"></param>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        private int[] GetArrayTo2Index(int[,] array, int index)
+        {
+            int count = array.GetLength(0);
+            int[] res = new int[count];
+            for (int i = 0; i < count; i++)
+            {
+                res[i] = array[i, index];
             }
 
             return res;
@@ -91,16 +111,16 @@ namespace Run
         /// <summary>
         /// Выбираем один вариант
         /// </summary>
-        /// <param name="resultFuncRunSet"></param>
+        /// <param name="array"></param>
         /// <param name="index"></param>
         /// <returns></returns>
-        private int[] GetResultIncomeVariant(int[,] resultFuncRunSet, int index)
+        private int[] GetArrayTo1Index(int[,] array, int index)
         {
-            int count = resultFuncRunSet.GetLength(0);
+            int count = array.GetLength(1);
             int[] res = new int[count];
             for (int i = 0; i < count; i++)
             {
-                res[i] = resultFuncRunSet[i, index];
+                res[i] = array[index, i];
             }
 
             return res;

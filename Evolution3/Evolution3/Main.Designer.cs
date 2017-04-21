@@ -30,6 +30,7 @@
         {
             this.btCreateDB = new System.Windows.Forms.Button();
             this.btInitDB = new System.Windows.Forms.Button();
+            this.btRun = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btCreateDB
@@ -52,11 +53,22 @@
             this.btInitDB.UseVisualStyleBackColor = true;
             this.btInitDB.Click += new System.EventHandler(this.btInitDB_Click);
             // 
+            // btRun
+            // 
+            this.btRun.Location = new System.Drawing.Point(13, 104);
+            this.btRun.Name = "btRun";
+            this.btRun.Size = new System.Drawing.Size(75, 23);
+            this.btRun.TabIndex = 2;
+            this.btRun.Text = "Run";
+            this.btRun.UseVisualStyleBackColor = true;
+            this.btRun.Click += new System.EventHandler(this.btRun_Click);
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(292, 273);
+            this.Controls.Add(this.btRun);
             this.Controls.Add(this.btInitDB);
             this.Controls.Add(this.btCreateDB);
             this.Name = "Main";
@@ -69,6 +81,7 @@
 
         private System.Windows.Forms.Button btCreateDB;
         private System.Windows.Forms.Button btInitDB;
+        private System.Windows.Forms.Button btRun;
     }
 }
 

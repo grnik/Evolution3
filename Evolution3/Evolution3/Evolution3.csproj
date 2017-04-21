@@ -94,6 +94,10 @@
       <Project>{10e0f1f2-642f-4169-b2ba-202ea5337ce2}</Project>
       <Name>DataDB</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Run\Run.csproj">
+      <Project>{d8e8ba79-bf33-40f0-9bf5-729bf288b283}</Project>
+      <Name>Run</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -27,6 +27,11 @@ namespace Calculation
             }
         }
 
+        public int[,] Reshuffle
+        {
+            get { return _reshuffleParam.Reshuffle; }
+        }
+
         private int _countParamsIncome;
         private IFunction _function;
 
@@ -61,7 +66,7 @@ namespace Calculation
         public int[,] GetSet(int[] paramsIncome)
         {
             int countParamsIncome = paramsIncome.Length;
-            if(countParamsIncome != _countParamsIncome)
+            if (countParamsIncome != _countParamsIncome)
                 throw new Exception("Кол-во входных параметров изменилось");
 
             int[,] res = new int[_reshuffleParam.CountReshuffle, _function.ParamCount];

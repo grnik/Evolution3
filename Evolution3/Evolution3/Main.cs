@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using DataDB;
+using RunModel = Run.Run;
 
 namespace Evolution3
 {
@@ -23,13 +24,18 @@ namespace Evolution3
             EvoluationContext context = new EvoluationContext();
 
             context.Database.CreateIfNotExists();
-
-            Init.Fill();
         }
 
         private void btInitDB_Click(object sender, EventArgs e)
         {
             EvoluationContext.Init(10);
+        }
+
+        private void btRun_Click(object sender, EventArgs e)
+        {
+            RunModel run = new RunModel();
+
+            MessageBox.Show(run.Search().ToString());
         }
     }
 }

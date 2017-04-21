@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration;
 using System.Linq;
@@ -28,6 +29,9 @@ namespace DataDB
             modelBuilder.Entity<InputData>().HasKey(p => new { p.IncomeIndexId, p.ParamIndexId });
             modelBuilder.Entity<InputData>().Property(p => p.Value).IsRequired();
             modelBuilder.Entity<Result>().HasKey(p => p.IncomeIndexId);
+            modelBuilder.Entity<Result>()
+                .Property(p => p.IncomeIndexId)
+                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
             modelBuilder.Entity<Setup>().HasKey(p => p.Id);
 
             base.OnModelCreating(modelBuilder);
@@ -47,6 +51,7 @@ namespace DataDB
 
                 //Заполняем по функции x*(x+y)
                 Setup setup = new Setup() { Id = 0, CountParamIndex = 2 };
+                context.Setups.Add(setup);
 
                 for (int i = 0; i < count; i++)
                 {

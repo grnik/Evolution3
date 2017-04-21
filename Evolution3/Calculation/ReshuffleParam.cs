@@ -21,6 +21,8 @@ namespace Calculation
         public int CountReshuffle { get; }
         /// <summary>
         /// Массив с перестановками всех параметров.
+        /// Первое измерение - индекс возможных вариантов перестановки
+        /// Второе - ссылка на индекс входящих значений.
         /// </summary>
         public int[,] Reshuffle { get; }
 

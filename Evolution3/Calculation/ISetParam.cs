@@ -32,5 +32,9 @@ namespace Calculation
         /// Число различных вариантов составления набора для данной функции и числа входный параметров.
         /// </summary>
         int CountReshuffle { get; }
+        /// <summary>
+        /// Ссылка на выбор входных параметров.
+        /// </summary>
+        int[,] Reshuffle { get; }
     }
 }

@@ -12,7 +12,7 @@ namespace Run
     /// </summary>
     public class Run
     {
-        private int[,] _incomeParams;
+        private int[,] _incomeVariants;
         private int[] _results;
         private int _countParamIndex;
 
@@ -22,31 +22,42 @@ namespace Run
             using (EvoluationContext context = new EvoluationContext())
             {
                 _countParamIndex = context.Setups.First().CountParamIndex;
-                _incomeParams = new int[context.InputDatas.Count() / _countParamIndex, _countParamIndex];
+
+                _incomeVariants = new int[context.InputDatas.Count() / _countParamIndex, _countParamIndex];
+                foreach (InputData inputData in context.InputDatas)
+                {
+                    _incomeVariants[inputData.IncomeIndexId, inputData.ParamIndexId] = inputData.Value;
+                }
+
                 _results = new int[context.Results.Count()];
+                foreach (Result result in context.Results)
+                {
+                    _results[result.IncomeIndexId] = result.Value;
+                }
             }
         }
 
         /// <summary>
         /// Запускаем с переданными данными
         /// </summary>
-        /// <param name="incomeParams"></param>
+        /// <param name="incomeVariants"></param>
         /// <param name="results"></param>
-        public Run(int[,] incomeParams, int[] results)
+        public Run(int[,] incomeVariants, int[] results)
         {
-            _countParamIndex = incomeParams.GetLength(1);
-            _incomeParams = incomeParams;
+            _countParamIndex = incomeVariants.GetLength(1);
+            _incomeVariants = incomeVariants;
             _results = results;
         }
 
         /// <summary>
         /// Запускаем поиск решения
         /// </summary>
-        public void Search()
+        public double Search()
         {
             Step0 step0 = new Step0();
 
-            step0.Run();
+            double betterCorr = step0.Run(_incomeVariants, _results);
+            return betterCorr;
         }
     }
 }

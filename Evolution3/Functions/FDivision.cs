@@ -36,7 +36,7 @@ namespace Functions
             if (paramInput.Length != ParamCount)
                 throw new Exception("Число переданных параметров не соответствует числу параметров функции.");
 
-            return paramInput[0] * paramInput[1];
+            return paramInput[1] == 0 ? int.MaxValue : paramInput[0] / paramInput[1];
         }
     }
 }
