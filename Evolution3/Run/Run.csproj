@@ -49,6 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ArrayCopy.cs" />
     <Compile Include="FunctionBetterRes.cs" />
     <Compile Include="FunctionSet.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

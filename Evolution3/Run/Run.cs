@@ -12,16 +12,22 @@ namespace Run
     /// </summary>
     public class Run
     {
+        /// <summary>
+        /// Первое измерение - номер варианта
+        /// Второе измерение - индекс 
+        /// </summary>
         private int[,] _incomeVariants;
         private int[] _results;
         private int _countParamIndex;
+        private DataDB.Setup _setup;
 
         //Считываем данные из БД
         public Run()
         {
             using (EvoluationContext context = new EvoluationContext())
             {
-                _countParamIndex = context.Setups.First().CountParamIndex;
+                _setup = context.Setups.First();
+                _countParamIndex = _setup.CountParamIndex;
 
                 _incomeVariants = new int[context.InputDatas.Count() / _countParamIndex, _countParamIndex];
                 foreach (InputData inputData in context.InputDatas)
@@ -54,7 +60,7 @@ namespace Run
         /// </summary>
         public double Search()
         {
-            Step0 step0 = new Step0();
+            Step0 step0 = new Step0(_setup);
 
             double betterCorr = step0.Run(_incomeVariants, _results);
             return betterCorr;

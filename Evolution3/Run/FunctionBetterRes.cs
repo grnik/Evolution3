@@ -22,6 +22,7 @@ namespace Run
         /// </summary>
         public int BetterIndexReshuffle { get; private set; }
         public int[] BetterReshuffle { get; private set; }
+        public int[] BetterResult { get; private set; }
 
         public FunctionBetterRes(ICalculation calculation, IFunction function, int countParamsIncome)
         {
@@ -62,18 +63,19 @@ namespace Run
             double[] correlation = new double[_setParam.CountReshuffle];
             for (int i = 0; i < _setParam.CountReshuffle; i++)
             {
-                correlation[i] = _functionSet.Correlation(results, GetArrayTo2Index(resultFuncRunSet, i));
+                correlation[i] = _functionSet.Correlation(results, ArrayCopy.GetArrayTo2Index(resultFuncRunSet, i));
             }
 
-            return ChooseBetterReshuffle(correlation);
+            return ChooseBetterReshuffle(correlation, resultFuncRunSet);
         }
 
         /// <summary>
         /// Выбираем лучшую корреляцию
         /// </summary>
         /// <param name="correlation"></param>
+        /// <param name="resultFuncRunSet"></param>
         /// <returns></returns>
-        private double ChooseBetterReshuffle(double[] correlation)
+        private double ChooseBetterReshuffle(double[] correlation, int[,] resultFuncRunSet)
         {
             BetterIndexReshuffle = 0;
             double res = 0;
@@ -85,43 +87,8 @@ namespace Run
                     BetterIndexReshuffle = i;
                 }
             }
-            BetterReshuffle = GetArrayTo1Index(_setParam.Reshuffle, BetterIndexReshuffle);
-
-            return res;
-        }
-
-        /// <summary>
-        /// Выбираем один вариант
-        /// </summary>
-        /// <param name="array"></param>
-        /// <param name="index"></param>
-        /// <returns></returns>
-        private int[] GetArrayTo2Index(int[,] array, int index)
-        {
-            int count = array.GetLength(0);
-            int[] res = new int[count];
-            for (int i = 0; i < count; i++)
-            {
-                res[i] = array[i, index];
-            }
-
-            return res;
-        }
-
-        /// <summary>
-        /// Выбираем один вариант
-        /// </summary>
-        /// <param name="array"></param>
-        /// <param name="index"></param>
-        /// <returns></returns>
-        private int[] GetArrayTo1Index(int[,] array, int index)
-        {
-            int count = array.GetLength(1);
-            int[] res = new int[count];
-            for (int i = 0; i < count; i++)
-            {
-                res[i] = array[index, i];
-            }
+            BetterReshuffle = ArrayCopy.GetArrayTo1Index(_setParam.Reshuffle, BetterIndexReshuffle);
+            BetterResult = ArrayCopy.GetArrayTo2Index(resultFuncRunSet, BetterIndexReshuffle);
 
             return res;
         }

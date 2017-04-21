@@ -13,5 +13,14 @@ namespace DataDB
         /// Сколько входных параметров в каждом запросе.
         /// </summary>
         public int CountParamIndex { get; set; }
+        /// <summary>
+        /// Максимальный уровень вложенности, для ограничения числа операций
+        /// </summary>
+        public int MaxLevel { get; set; }
+
+        /// <summary>
+        /// Какой корреляции хотим добиться.
+        /// </summary>
+        public double TargetCorrelation { get; set; }
     }
 }

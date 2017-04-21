@@ -33,6 +33,9 @@ namespace DataDB
                 .Property(p => p.IncomeIndexId)
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
             modelBuilder.Entity<Setup>().HasKey(p => p.Id);
+            modelBuilder.Entity<Setup>().Property(p => p.MaxLevel).IsRequired();
+            modelBuilder.Entity<Setup>().Property(p => p.TargetCorrelation).IsRequired();
+            modelBuilder.Entity<Setup>().Property(p => p.CountParamIndex).IsRequired();
 
             base.OnModelCreating(modelBuilder);
         }
@@ -50,14 +53,14 @@ namespace DataDB
                 RecreateDB(context);
 
                 //Заполняем по функции x*(x+y)
-                Setup setup = new Setup() { Id = 0, CountParamIndex = 2 };
+                Setup setup = new Setup() { Id = 0, CountParamIndex = 2, MaxLevel = 10,TargetCorrelation = 0.9999999};
                 context.Setups.Add(setup);
 
                 for (int i = 0; i < count; i++)
                 {
                     int x = i * 2;
-                    int y = i * 3;
-                    int r = x * (x + y);
+                    int y = (i + 1) * 3;
+                    int r = x * (x + y) / y;
 
                     InputData inputData = new InputData() { IncomeIndexId = i, ParamIndexId = 0, Value = x };
                     context.InputDatas.Add(inputData);
