@@ -21,6 +21,8 @@ namespace DataDB
         public DbSet<InputData> InputDatas { get; set; }
         public DbSet<Result> Results { get; set; }
         public DbSet<Setup> Setups { get; set; }
+        public DbSet<RunResult> RunResults { get; set; }
+        public DbSet<RunResultParam> RunResultParams { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -36,6 +38,9 @@ namespace DataDB
             modelBuilder.Entity<Setup>().Property(p => p.MaxLevel).IsRequired();
             modelBuilder.Entity<Setup>().Property(p => p.TargetCorrelation).IsRequired();
             modelBuilder.Entity<Setup>().Property(p => p.CountParamIndex).IsRequired();
+            modelBuilder.Entity<RunResult>().HasKey(p => p.Id);
+            modelBuilder.Entity<RunResultParam>().HasKey(p => p.Id);
+            modelBuilder.Entity<RunResult>().HasMany(p => p.Parameters).WithRequired(p => p.RunResult).HasForeignKey(p => p.RunResultId);
 
             base.OnModelCreating(modelBuilder);
         }
@@ -53,7 +58,7 @@ namespace DataDB
                 RecreateDB(context);
 
                 //Заполняем по функции x*(x+y)
-                Setup setup = new Setup() { Id = 0, CountParamIndex = 2, MaxLevel = 10,TargetCorrelation = 0.9999999};
+                Setup setup = new Setup() { Id = 0, CountParamIndex = 2, MaxLevel = 10, TargetCorrelation = 0.9999999 };
                 context.Setups.Add(setup);
 
                 for (int i = 0; i < count; i++)
