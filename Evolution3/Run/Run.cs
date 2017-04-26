@@ -106,6 +106,7 @@ namespace Run
                 result.Result = bettCorr;
                 result.Level = level;
                 result.IndexOut = indexForChange;
+                result.StandardDeviation = functionBetter.StandardDeviation;
                 context.RunResults.Add(result);
                 for (int i = 0; i < functionBetter.Function.ParamCount; i++)
                 {

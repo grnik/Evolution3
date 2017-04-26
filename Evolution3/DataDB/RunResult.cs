@@ -46,5 +46,7 @@ SELECT RR.[Id]
         /// В какой параметр записываем результат
         /// </summary>
         public int IndexOut { get; set; }
+
+        public double StandardDeviation { get; set; }
     }
 }

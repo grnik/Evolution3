@@ -23,6 +23,19 @@ namespace Run
         public int BetterIndexReshuffle { get; private set; }
         public int[] BetterReshuffle { get; private set; }
         public int[] BetterResult { get; private set; }
+        /// <summary>
+        /// Все результаты выполнения.
+        /// Первый индекс - Набор параметров
+        /// Второй индекс - Число вариантов параметров. BetterIndexReshuffle - показывает какой брать для лучшего решения.
+        /// </summary>
+        public int[,] AllResultsRun { get; private set; }
+        /// <summary>
+        /// Корреляция для всех вариантов параметров. BetterIndexReshuffle - показывает какой брать для лучшего решения.
+        /// </summary>
+
+        public double[] Correlation { get; private set; }
+
+        public double StandardDeviation { get; private set; }
 
         public FunctionBetterRes(ICalculation calculation, IFunction function, int countParamsIncome)
         {
@@ -46,7 +59,7 @@ namespace Run
             if (_countParamsIncome != incomeVariants.GetLength(1))
                 throw new Exception("Число входных параметров не соответсвтует объявленным");
             //Результат выполнения функции на всех наборах.
-            int[,] resultFuncRunSet = new int[count, _setParam.CountReshuffle];
+            AllResultsRun = new int[count, _setParam.CountReshuffle];
             for (int i = 0; i < count; i++)
             {
                 int[] incomeParam = FunctionSet.GetOwnSetIncomeParams(incomeVariants, i);
@@ -56,39 +69,97 @@ namespace Run
                     throw new Exception("Число ответов и число вариантов не совпадает");
                 for (int j = 0; j < _setParam.CountReshuffle; j++)
                 {
-                    resultFuncRunSet[i, j] = resultForSet[j];
+                    AllResultsRun[i, j] = resultForSet[j];
                 }
             }
 
-            double[] correlation = new double[_setParam.CountReshuffle];
+            Correlation = new double[_setParam.CountReshuffle];
             for (int i = 0; i < _setParam.CountReshuffle; i++)
             {
-                correlation[i] = _functionSet.Correlation(results, ArrayCopy.GetArrayTo2Index(resultFuncRunSet, i));
+                Correlation[i] = _functionSet.Correlation(results, ArrayCopy.GetArrayTo2Index(AllResultsRun, i));
             }
 
-            return ChooseBetterReshuffle(correlation, resultFuncRunSet);
+            return ChooseBetterReshuffle(results);
         }
 
         /// <summary>
         /// Выбираем лучшую корреляцию
         /// </summary>
-        /// <param name="correlation"></param>
-        /// <param name="resultFuncRunSet"></param>
+        /// <param name="results"></param>
         /// <returns></returns>
-        private double ChooseBetterReshuffle(double[] correlation, int[,] resultFuncRunSet)
+        private double ChooseBetterReshuffle(int[] results)
         {
             BetterIndexReshuffle = 0;
             double res = 0;
-            for (int i = 0; i < correlation.Length; i++)
+            StandardDeviation = Double.MaxValue;
+            for (int i = 0; i < Correlation.Length; i++)
             {
-                if (Math.Abs(correlation[i]) > res)
+                //Если корреляция совпадает, то выбираем решение с наименьшим среднеквадратичным отклонением.
+                if (CompareDouble(Math.Abs(Correlation[i]), res) == 0)
                 {
-                    res = Math.Abs(correlation[i]);
+                    int[] resultsRun = ArrayCopy.GetArrayTo2Index(AllResultsRun, i);
+                    double stDev = GetStandardDeviation(results, resultsRun);
+                    if (CompareDouble(stDev, StandardDeviation) < 0)
+                    {
+                        res = Math.Abs(Correlation[i]);
+                        BetterIndexReshuffle = i;
+                        BetterResult = resultsRun;
+                        StandardDeviation = stDev;
+                    }
+                    //Выбираем решение с меньшей корреляцией
+                }
+                else if (Math.Abs(Correlation[i]) > res)
+                {
+                    res = Math.Abs(Correlation[i]);
                     BetterIndexReshuffle = i;
+                    BetterResult = ArrayCopy.GetArrayTo2Index(AllResultsRun, BetterIndexReshuffle);
+                    StandardDeviation = GetStandardDeviation(results, BetterResult);
                 }
             }
             BetterReshuffle = ArrayCopy.GetArrayTo1Index(_setParam.Reshuffle, BetterIndexReshuffle);
-            BetterResult = ArrayCopy.GetArrayTo2Index(resultFuncRunSet, BetterIndexReshuffle);
+
+            return res;
+        }
+
+        /// <summary>
+        /// Возвращает результат сравнения.
+        /// 1- d1 > d2
+        /// -1 - d1 < d2
+        /// 0 - d1 = d2
+        /// Nan - один из операторов NaN
+        /// </summary>
+        /// <param name="d1"></param>
+        /// <param name="d2"></param>
+        /// <returns></returns>
+        public static double CompareDouble(double d1, double d2)
+        {
+            //Точность сравнения.
+            const double precision = 1E-7;
+
+            if (Double.IsNaN(d1) || Double.IsNaN(d2))
+                return Double.NaN;
+            if (Math.Abs(d1 - d2) < precision)
+                return 0;
+
+            return d1 > d2 ? 1 : -1;
+        }
+
+        /// <summary>
+        /// Среднеквадротичное отклонение
+        /// </summary>
+        /// <returns></returns>
+        private double GetStandardDeviation(int[] array1, int[] array2)
+        {
+            int count = array1.Length;
+            if (count != array2.Length)
+            {
+                throw new Exception("Нельзя посчитать среднеквадротичное отклонение на массивах разной длины.");
+            }
+            double res = 0;
+            for (int i = 0; i < count; i++)
+            {
+                res += Math.Pow(array1[1] - array2[i], 2);
+            }
 
             return res;
         }
