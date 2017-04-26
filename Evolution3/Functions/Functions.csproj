@@ -41,7 +41,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FFactory.cs" />
+    <Compile Include="FMinus1.cs" />
     <Compile Include="FMultiplication.cs" />
+    <Compile Include="FPlus1.cs" />
     <Compile Include="FSetup.cs" />
     <Compile Include="FDivision.cs" />
     <Compile Include="IFunction.cs" />

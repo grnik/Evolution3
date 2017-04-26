@@ -12,12 +12,14 @@ SELECT RR.[Id]
       ,RR.[RunTime]
       ,RR.[Function]
       ,RR.[Result]
+	  ,RR.StandardDeviation
+	  ,RR.IndexOut
       ,RR.[Level]
 	  ,RRP.IndexParam
 	  ,RRP.OrderParam
   FROM [Evoluation3].[dbo].[RunResults] RR inner join [dbo].[RunResultParams] RRP on RR.Id = RRP.RunResultId
-  order by RR.Level, RRP.OrderParam
-  */
+  order by RR.Level, RR.RunTime, RRP.OrderParam
+    */
     /// <summary>
     /// 
     /// </summary>

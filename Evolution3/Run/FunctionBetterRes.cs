@@ -106,8 +106,8 @@ namespace Run
                         BetterResult = resultsRun;
                         StandardDeviation = stDev;
                     }
-                    //Выбираем решение с меньшей корреляцией
                 }
+                //Выбираем решение с меньшей корреляцией
                 else if (Math.Abs(Correlation[i]) > res)
                 {
                     res = Math.Abs(Correlation[i]);

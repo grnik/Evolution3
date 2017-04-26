@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Functions
 {
-    public enum FunctionName { Minus, Plus, Multiplication, Division }
+    public enum FunctionName { Minus, Plus, Multiplication, Division, Minus1, Plus1 }
     public static class FFactory
     {
         private static Dictionary<string, IFunction> functions = new Dictionary<string, IFunction>();
@@ -25,6 +25,10 @@ namespace Functions
                         functions.Add(name, new FMultiplication()); break;
                     case "Division":
                         functions.Add(name, new FDivision()); break;
+                    case "Minus1":
+                        functions.Add(name, new FMinus1()); break;
+                    case "Plus1":
+                        functions.Add(name, new FPlus1()); break;
                     default:
                         throw new ArgumentOutOfRangeException("Неизвестная функция");
                 }
@@ -41,6 +45,8 @@ namespace Functions
             res.Add(Create(FunctionName.Plus.ToString()));
             res.Add(Create(FunctionName.Multiplication.ToString()));
             res.Add(Create(FunctionName.Division.ToString()));
+            res.Add(Create(FunctionName.Minus1.ToString()));
+            res.Add(Create(FunctionName.Plus1.ToString()));
 
             return res;
         }
