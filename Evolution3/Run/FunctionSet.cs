@@ -32,14 +32,14 @@ namespace Run
         /// </summary>
         /// <param name="inputParams"></param>
         /// <returns></returns>
-        public int[] Run(int[,] inputParams)
+        public double[] Run(double[,] inputParams)
         {
             int length = inputParams.GetLength(0);
-            int[] res = new int[length];
+            double[] res = new double[length];
 
             for (int i = 0; i < length; i++)
             {
-                int[] funcParams = GetOwnSetIncomeParams(inputParams, i);
+                double[] funcParams = GetOwnSetIncomeParams(inputParams, i);
                 res[i] = _function.Run(funcParams);
             }
 
@@ -52,12 +52,12 @@ namespace Run
         /// <param name="compareResults">Заданные ответы</param>
         /// <param name="inputParams">Все наборы входных параметров</param>
         /// <returns></returns>
-        public double CorrelationWithRun(int[] compareResults, int[,] inputParams)
+        public double CorrelationWithRun(double[] compareResults, double[,] inputParams)
         {
             int count = inputParams.GetLength(0);
             if (compareResults.Length != count)
                 throw new Exception("Число входных параметров и результатов сравнения не совпадают");
-            int[] resultFunc = Run(inputParams);
+            double[] resultFunc = Run(inputParams);
 
             double res = _calculation.Correlation(compareResults, resultFunc);
 
@@ -70,7 +70,7 @@ namespace Run
         /// <param name="compareResults">Заданные ответы</param>
         /// <param name="resultFunc">Рассчитанные результаты</param>
         /// <returns></returns>
-        public double Correlation(int[] compareResults, int[] resultFunc)
+        public double Correlation(double[] compareResults, double[] resultFunc)
         {
             return _calculation.Correlation(compareResults, resultFunc);
         }
@@ -81,10 +81,10 @@ namespace Run
         /// <param name="setParams"></param>
         /// <param name="index"></param>
         /// <returns></returns>
-        public static int[] GetOwnSetIncomeParams(int[,] setParams, int index)
+        public static double[] GetOwnSetIncomeParams(double[,] setParams, int index)
         {
             int count = setParams.GetLength(1);
-            int[] res = new int[count];
+            double[] res = new double[count];
             for (int i = 0; i < count; i++)
             {
                 res[i] = setParams[index, i];

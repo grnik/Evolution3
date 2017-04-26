@@ -31,7 +31,7 @@ namespace Functions
             get { return false; }
         }
 
-        int IFunction.Run(params int[] paramInput)
+        double IFunction.Run(params double[] paramInput)
         {
             if (paramInput.Length != ParamCount)
                 throw new Exception("Число переданных параметров не соответствует числу параметров функции.");

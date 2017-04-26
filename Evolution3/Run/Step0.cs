@@ -37,7 +37,7 @@ namespace Run
         /// <param name="results"></param>
         /// <param name="level"></param>
         /// <returns></returns>
-        public double Run(int[,] incomVariants, int[] results, int level = 0)
+        public double Run(double[,] incomVariants, double[] results, int level = 0)
         {
             int count = _functions.Count;
             int countIncomeParams = incomVariants.GetLength(1);

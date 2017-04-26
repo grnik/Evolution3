@@ -22,13 +22,13 @@ namespace Run
         /// </summary>
         public int BetterIndexReshuffle { get; private set; }
         public int[] BetterReshuffle { get; private set; }
-        public int[] BetterResult { get; private set; }
+        public double[] BetterResult { get; private set; }
         /// <summary>
         /// Все результаты выполнения.
         /// Первый индекс - Набор параметров
         /// Второй индекс - Число вариантов параметров. BetterIndexReshuffle - показывает какой брать для лучшего решения.
         /// </summary>
-        public int[,] AllResultsRun { get; private set; }
+        public double[,] AllResultsRun { get; private set; }
         /// <summary>
         /// Корреляция для всех вариантов параметров. BetterIndexReshuffle - показывает какой брать для лучшего решения.
         /// </summary>
@@ -51,7 +51,7 @@ namespace Run
         /// <param name="incomeVariants"></param>
         /// <param name="results"></param>
         /// <returns></returns>
-        public double Better(int[,] incomeVariants, int[] results)
+        public double Better(double[,] incomeVariants, double[] results)
         {
             int count = results.Length;
             if (count != incomeVariants.GetLength(0))
@@ -59,12 +59,12 @@ namespace Run
             if (_countParamsIncome != incomeVariants.GetLength(1))
                 throw new Exception("Число входных параметров не соответсвтует объявленным");
             //Результат выполнения функции на всех наборах.
-            AllResultsRun = new int[count, _setParam.CountReshuffle];
+            AllResultsRun = new double[count, _setParam.CountReshuffle];
             for (int i = 0; i < count; i++)
             {
-                int[] incomeParam = FunctionSet.GetOwnSetIncomeParams(incomeVariants, i);
-                int[,] incomeSetParams = _setParam.GetSet(incomeParam);
-                int[] resultForSet = _functionSet.Run(incomeSetParams);
+                double[] incomeParam = FunctionSet.GetOwnSetIncomeParams(incomeVariants, i);
+                double[,] incomeSetParams = _setParam.GetSet(incomeParam);
+                double[] resultForSet = _functionSet.Run(incomeSetParams);
                 if (_setParam.CountReshuffle != resultForSet.Length)
                     throw new Exception("Число ответов и число вариантов не совпадает");
                 for (int j = 0; j < _setParam.CountReshuffle; j++)
@@ -87,7 +87,7 @@ namespace Run
         /// </summary>
         /// <param name="results"></param>
         /// <returns></returns>
-        private double ChooseBetterReshuffle(int[] results)
+        private double ChooseBetterReshuffle(double[] results)
         {
             BetterIndexReshuffle = 0;
             double res = 0;
@@ -97,7 +97,7 @@ namespace Run
                 //Если корреляция совпадает, то выбираем решение с наименьшим среднеквадратичным отклонением.
                 if (CompareDouble(Math.Abs(Correlation[i]), res) == 0)
                 {
-                    int[] resultsRun = ArrayCopy.GetArrayTo2Index(AllResultsRun, i);
+                    double[] resultsRun = ArrayCopy.GetArrayTo2Index(AllResultsRun, i);
                     double stDev = GetStandardDeviation(results, resultsRun);
                     if (CompareDouble(stDev, StandardDeviation) < 0)
                     {
@@ -148,7 +148,7 @@ namespace Run
         /// Среднеквадротичное отклонение
         /// </summary>
         /// <returns></returns>
-        private double GetStandardDeviation(int[] array1, int[] array2)
+        private double GetStandardDeviation(double[] array1, double[] array2)
         {
             int count = array1.Length;
             if (count != array2.Length)

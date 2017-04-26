@@ -19,8 +19,8 @@ namespace Run
         /// Первое измерение - номер варианта
         /// Второе измерение - индекс 
         /// </summary>
-        private int[,] _incomeVariants;
-        private int[] _results;
+        private double[,] _incomeVariants;
+        private double[] _results;
         private int _countParamIndex;
         private DataDB.Setup _setup;
         ICalculation _calculation;
@@ -34,13 +34,13 @@ namespace Run
                 _setup = context.Setups.First();
                 _countParamIndex = _setup.CountParamIndex;
 
-                _incomeVariants = new int[context.InputDatas.Count() / _countParamIndex, _countParamIndex];
+                _incomeVariants = new double[context.InputDatas.Count() / _countParamIndex, _countParamIndex];
                 foreach (InputData inputData in context.InputDatas)
                 {
                     _incomeVariants[inputData.IncomeIndexId, inputData.ParamIndexId] = inputData.Value;
                 }
 
-                _results = new int[context.Results.Count()];
+                _results = new double[context.Results.Count()];
                 foreach (Result result in context.Results)
                 {
                     _results[result.IncomeIndexId] = result.Value;
@@ -53,7 +53,7 @@ namespace Run
         /// </summary>
         /// <param name="incomeVariants"></param>
         /// <param name="results"></param>
-        public Run(int[,] incomeVariants, int[] results)
+        public Run(double[,] incomeVariants, double[] results)
         {
             _countParamIndex = incomeVariants.GetLength(1);
             _incomeVariants = incomeVariants;
@@ -129,7 +129,7 @@ namespace Run
         /// <param name="incomVariants"></param>
         /// <param name="betterResult"></param>
         /// <returns>Индекс входного параметра для замены.</returns>
-        private int GetIndexChange(int[,] incomVariants, int[] betterResult)
+        private int GetIndexChange(double[,] incomVariants, double[] betterResult)
         {
             int count = incomVariants.GetLength(1);
             //double[] correlations = new double[count];
@@ -156,7 +156,7 @@ namespace Run
         /// <param name="incomVariants"></param>
         /// <param name="forChangeArray"></param>
         /// <param name="index"></param>
-        private static void ChangeIncomeVariants(ref int[,] incomVariants, int[] forChangeArray, int index)
+        private static void ChangeIncomeVariants(ref double[,] incomVariants, double[] forChangeArray, int index)
         {
             int count = incomVariants.GetLength(0);
             if (count != forChangeArray.Length)

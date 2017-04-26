@@ -34,7 +34,7 @@ namespace Execute
             }
         }
 
-        public int Run(int[] incomeParams)
+        public double Run(double[] incomeParams)
         {
             for (int i = 0; i < _count; i++)
             {
@@ -44,10 +44,10 @@ namespace Execute
             return incomeParams[_runs[_count - 1].IndexOut];
         }
 
-        int[] GetParams(int[] incomeParams, RunResult run)
+        double[] GetParams(double[] incomeParams, RunResult run)
         {
             int countFunc = run.Parameters.Count;
-            int[] res = new int[countFunc];
+            double[] res = new double[countFunc];
             List<RunResultParam> runParams = run.Parameters.OrderBy(p => p.OrderParam).ToList();
             for (int i = 0; i < countFunc; i++)
             {

@@ -44,7 +44,6 @@
     <Compile Include="FMinus1.cs" />
     <Compile Include="FMultiplication.cs" />
     <Compile Include="FPlus1.cs" />
-    <Compile Include="FSetup.cs" />
     <Compile Include="FDivision.cs" />
     <Compile Include="IFunction.cs" />
     <Compile Include="FPlus.cs" />

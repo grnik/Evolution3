@@ -63,13 +63,13 @@ namespace Calculation
         /// </summary>
         /// <param name="paramsIncome"></param>
         /// <returns></returns>
-        public int[,] GetSet(int[] paramsIncome)
+        public double[,] GetSet(double[] paramsIncome)
         {
             int countParamsIncome = paramsIncome.Length;
             if (countParamsIncome != _countParamsIncome)
                 throw new Exception("Кол-во входных параметров изменилось");
 
-            int[,] res = new int[_reshuffleParam.CountReshuffle, _function.ParamCount];
+            double[,] res = new double[_reshuffleParam.CountReshuffle, _function.ParamCount];
             for (int i = 0; i < _reshuffleParam.CountReshuffle; i++)
             {
                 for (int j = 0; j < _function.ParamCount; j++)

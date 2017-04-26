@@ -41,7 +41,7 @@ namespace Evolution3
         private void btExecute_Click(object sender, EventArgs e)
         {
             Execute.Execute execute = new Execute.Execute();
-            int[] incomePar = new[] {6, 12, 3, 4};
+            double[] incomePar = new double[]{6, 12.0, 3.0, 4.0};
             MessageBox.Show(execute.Run(incomePar).ToString());
         }
     }

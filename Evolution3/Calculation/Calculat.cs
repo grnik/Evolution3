@@ -18,7 +18,7 @@ namespace Calculation
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
-        public double Correlation(int[] x, int[] y)
+        public double Correlation(double[] x, double[] y)
         {
             checked
             {
@@ -43,7 +43,7 @@ namespace Calculation
         /// </summary>
         /// <param name="x"></param>
         /// <returns></returns>
-        double SumX(int[] x)
+        double SumX(double[] x)
         {
             return x.Sum(p => (double)p);
         }
@@ -54,7 +54,7 @@ namespace Calculation
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
-        double SumMultiply(int[] x, int[] y)
+        double SumMultiply(double[] x, double[] y)
         {
             int count = x.Length;
             if (count != y.Length)
@@ -69,7 +69,7 @@ namespace Calculation
             return sum;
         }
 
-        double SumSquare(int[] x)
+        double SumSquare(double[] x)
         {
             return x.Sum(p => Math.Pow(p, 2));
             //double sum = 0;
@@ -89,7 +89,7 @@ namespace Calculation
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
-        double CorrelationOld(int[] x, int[] y)
+        double CorrelationOld(double[] x, double[] y)
         {
             checked
             {
@@ -98,8 +98,8 @@ namespace Calculation
                 if (x.Length == 0)
                     throw new Exception("При расчете корреляции входные последовательности пусты.");
 
-                int x_ = AvarageValue(x);
-                int y_ = AvarageValue(y);
+                double x_ = AvarageValue(x);
+                double y_ = AvarageValue(y);
 
                 double deletel = Math.Sqrt(SumSquareAvr(x, x_) * SumSquareAvr(y, y_));
                 double chastnoe = SumMultAvr(x, x_, y, y_);
@@ -108,9 +108,9 @@ namespace Calculation
             }
         }
 
-        int AvarageValue(int[] x)
+        double AvarageValue(double[] x)
         {
-            int sum = x.Sum(z => z);
+            double sum = x.Sum(z => z);
 
             return sum / x.Length;
         }
@@ -123,9 +123,9 @@ namespace Calculation
         /// <param name="y"></param>
         /// <param name="y_"></param>
         /// <returns></returns>
-        int SumMultAvr(int[] x, int x_, int[] y, int y_)
+        double SumMultAvr(double[] x, double x_, double[] y, double y_)
         {
-            int sum = 0;
+            double sum = 0;
             for (int i = 0; i < x.Length; i++)
             {
                 sum += (x[i] - x_) * (y[i] - y_);
@@ -140,9 +140,9 @@ namespace Calculation
         /// <param name="x"></param>
         /// <param name="x_"></param>
         /// <returns></returns>
-        int SumSquareAvr(int[] x, int x_)
+        double SumSquareAvr(double[] x, double x_)
         {
-            int sum = x.Sum(p => (p - x_) * (p - x_));
+            double sum = x.Sum(p => (p - x_) * (p - x_));
 
             return sum;
         }

@@ -19,7 +19,7 @@ namespace Calculation
         /// </summary>
         /// <param name="paramsIncome">Значения входных параметров</param>
         /// <returns>Набор вариантов для одной функции и для одного набора входных параметров.</returns>
-        int[,] GetSet(int[] paramsIncome);
+        double[,] GetSet(double[] paramsIncome);
 
         /// <summary>
         /// Возвращает индексы входных параметров, которые использовались для создания данного набора параметров вызова функции.

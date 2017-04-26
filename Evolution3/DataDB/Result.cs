@@ -18,6 +18,6 @@ namespace DataDB
         /// <summary>
         /// Значение
         /// </summary>
-        public int Value { get; set; }
+        public double Value { get; set; }
     }
 }

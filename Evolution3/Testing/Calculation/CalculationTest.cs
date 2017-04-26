@@ -17,8 +17,8 @@ namespace Testing
         {
             ICalculation calculation = NInjectSetup.Kernel.Get<ICalculation>();
 
-            int[] x = new int[] { 1, 2, 3 };
-            int[] y = new int[] { 2, 3, 4 };
+            double[] x = new double[] { 1, 2, 3 };
+            double[] y = new double[] { 2, 3, 4 };
 
             double crr = calculation.Correlation(x, y);
 
@@ -26,8 +26,8 @@ namespace Testing
             Assert.That(crr, Is.LessThanOrEqualTo(1));
 
 
-            x = new int[] { 1, 2, 3 };
-            y = new int[] { 4, 3, 1 };
+            x = new double[] { 1, 2, 3 };
+            y = new double[] { 4, 3, 1 };
 
             crr = calculation.Correlation(x, y);
 

@@ -14,9 +14,9 @@ namespace Testing.Calculation
     class SetParamTest
     {
         Random random = new Random();
-        int[] GenerateIncomeParam(int count)
+        double[] GenerateIncomeParam(int count)
         {
-            int[] res = new int[count];
+            double[] res = new double[count];
 
             for (int i = 0; i < count; i++)
             {
@@ -33,11 +33,11 @@ namespace Testing.Calculation
             IFunction function = FFactory.Create(functionName);
             ISetParam setParam = new SetParam(function, incomeCount);
 
-            int[] incomeArray = GenerateIncomeParam(incomeCount);
+            double[] incomeArray = GenerateIncomeParam(incomeCount);
 
-            int[,] paramsInts = setParam.GetSet(incomeArray);
+            double[,] paramsInts = setParam.GetSet(incomeArray);
 
-            int[] countIncome = new int[incomeCount];
+            double[] countIncome = new double[incomeCount];
             for (int i = 0; i < paramsInts.GetLength(0); i++)
             {
                 for (int j = 0; j < function.ParamCount; j++)

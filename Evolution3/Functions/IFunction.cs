@@ -29,6 +29,6 @@ namespace Functions
         /// </summary>
         /// <param name="paramInput"></param>
         /// <returns></returns>
-        int Run(params int[] paramInput);
+        double Run(params double[] paramInput);
     }
 }

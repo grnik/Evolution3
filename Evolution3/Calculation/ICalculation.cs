@@ -9,6 +9,6 @@ namespace Calculation
 {
     public interface ICalculation
     {
-        double Correlation(int[] x, int[] y);
+        double Correlation(double[] x, double[] y);
     }
 }
