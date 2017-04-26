@@ -31,6 +31,7 @@
             this.btCreateDB = new System.Windows.Forms.Button();
             this.btInitDB = new System.Windows.Forms.Button();
             this.btRun = new System.Windows.Forms.Button();
+            this.btExecute = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btCreateDB
@@ -63,11 +64,22 @@
             this.btRun.UseVisualStyleBackColor = true;
             this.btRun.Click += new System.EventHandler(this.btRun_Click);
             // 
+            // btExecute
+            // 
+            this.btExecute.Location = new System.Drawing.Point(152, 104);
+            this.btExecute.Name = "btExecute";
+            this.btExecute.Size = new System.Drawing.Size(75, 23);
+            this.btExecute.TabIndex = 3;
+            this.btExecute.Text = "Execute";
+            this.btExecute.UseVisualStyleBackColor = true;
+            this.btExecute.Click += new System.EventHandler(this.btExecute_Click);
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(292, 273);
+            this.Controls.Add(this.btExecute);
             this.Controls.Add(this.btRun);
             this.Controls.Add(this.btInitDB);
             this.Controls.Add(this.btCreateDB);
@@ -82,6 +94,7 @@
         private System.Windows.Forms.Button btCreateDB;
         private System.Windows.Forms.Button btInitDB;
         private System.Windows.Forms.Button btRun;
+        private System.Windows.Forms.Button btExecute;
     }
 }
 

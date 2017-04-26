@@ -37,5 +37,12 @@ namespace Evolution3
 
             MessageBox.Show(run.Search().ToString());
         }
+
+        private void btExecute_Click(object sender, EventArgs e)
+        {
+            Execute.Execute execute = new Execute.Execute();
+            int[] incomePar = new[] {1, 2, 3, 4};
+            MessageBox.Show(execute.Run(incomePar).ToString());
+        }
     }
 }

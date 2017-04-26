@@ -18,7 +18,7 @@ namespace Functions
 
         string IFunction.Name
         {
-            get { return "Вычитание"; }
+            get { return "Minus"; }
         }
 
         public int ParamCount

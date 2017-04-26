@@ -6,6 +6,21 @@ using System.Threading.Tasks;
 
 namespace DataDB
 {
+    /*
+SELECT RR.[Id]
+      ,RR.[RunId]
+      ,RR.[RunTime]
+      ,RR.[Function]
+      ,RR.[Result]
+      ,RR.[Level]
+	  ,RRP.IndexParam
+	  ,RRP.OrderParam
+  FROM [Evoluation3].[dbo].[RunResults] RR inner join [dbo].[RunResultParams] RRP on RR.Id = RRP.RunResultId
+  order by RR.Level, RRP.OrderParam
+  */
+    /// <summary>
+    /// 
+    /// </summary>
     public class RunResult
     {
         public Guid Id { get; set; }
@@ -27,6 +42,9 @@ namespace DataDB
         public double Result { get; set; }
         public ICollection<RunResultParam> Parameters { get; set; }
         public int Level { get; set; }
-
+        /// <summary>
+        /// В какой параметр записываем результат
+        /// </summary>
+        public int IndexOut { get; set; }
     }
 }

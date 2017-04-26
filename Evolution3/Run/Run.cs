@@ -71,11 +71,12 @@ namespace Run
             do
             {
                 double bettCorr = step0.Run(_incomeVariants, _results, level);
-                SaveResult(idRun, step0, bettCorr, level);
 
                 //Изменяем входные параметры на новые.
                 int indexForChange = GetIndexChange(_incomeVariants, step0.FunctionBetter[step0.BetterCorrelationIndex].BetterResult);
                 ChangeIncomeVariants(ref _incomeVariants, step0.FunctionBetter[step0.BetterCorrelationIndex].BetterResult, indexForChange);
+
+                SaveResult(idRun, step0, bettCorr, level, indexForChange);
 
                 if ((level >= _setup.MaxLevel) || (bettCorr > _setup.TargetCorrelation))
                 {
@@ -92,7 +93,7 @@ namespace Run
         /// <param name="step"></param>
         /// <param name="bettCorr"></param>
         /// <param name="level"></param>
-        private void SaveResult(Guid runGuid, Step0 step, double bettCorr, int level)
+        private void SaveResult(Guid runGuid, Step0 step, double bettCorr, int level, int indexForChange)
         {
             using (EvoluationContext context = new EvoluationContext())
             {
@@ -104,6 +105,7 @@ namespace Run
                 result.RunTime = DateTime.Now;
                 result.Result = bettCorr;
                 result.Level = level;
+                result.IndexOut = indexForChange;
                 context.RunResults.Add(result);
                 for (int i = 0; i < functionBetter.Function.ParamCount; i++)
                 {
