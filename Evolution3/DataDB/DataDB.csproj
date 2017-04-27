@@ -49,6 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DBFilling.cs" />
     <Compile Include="EvoluationContext.cs" />
     <Compile Include="InputData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -57,25 +57,28 @@ namespace DataDB
             {
                 RecreateDB(context);
 
-                //Заполняем по функции x*(x+y)
-                Setup setup = new Setup() { Id = 0, CountParamIndex = 2, MaxLevel = 10, TargetCorrelation = 0.9999999 };
-                context.Setups.Add(setup);
+                DBFilling filling = new DBFilling();
+                filling.Filling();
 
-                for (int i = 0; i < count; i++)
-                {
-                    int x = i * 2;
-                    int y = (i + 1) * 3;
-                    int r = x * (x + y) / y;
+                ////Заполняем по функции x*(x+y)
+                //Setup setup = new Setup() { Id = 0, CountParamIndex = 2, MaxLevel = 10, TargetCorrelation = 0.9999999 };
+                //context.Setups.Add(setup);
 
-                    InputData inputData = new InputData() { IncomeIndexId = i, ParamIndexId = 0, Value = x };
-                    context.InputDatas.Add(inputData);
-                    inputData = new InputData() { IncomeIndexId = i, ParamIndexId = 1, Value = y };
-                    context.InputDatas.Add(inputData);
+                //for (int i = 0; i < count; i++)
+                //{
+                //    int x = i * 2;
+                //    int y = (i + 1) * 3;
+                //    int r = x * (x + y) / y;
 
-                    Result result = new Result() { IncomeIndexId = i, Value = r };
-                    context.Results.Add(result);
-                }
-                context.SaveChanges();
+                //    InputData inputData = new InputData() { IncomeIndexId = i, ParamIndexId = 0, Value = x };
+                //    context.InputDatas.Add(inputData);
+                //    inputData = new InputData() { IncomeIndexId = i, ParamIndexId = 1, Value = y };
+                //    context.InputDatas.Add(inputData);
+
+                //    Result result = new Result() { IncomeIndexId = i, Value = r };
+                //    context.Results.Add(result);
+                //}
+                //context.SaveChanges();
             }
         }
 

@@ -32,6 +32,8 @@
             this.btInitDB = new System.Windows.Forms.Button();
             this.btRun = new System.Windows.Forms.Button();
             this.btExecute = new System.Windows.Forms.Button();
+            this.btDBFilling = new System.Windows.Forms.Button();
+            this.btClearResult = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btCreateDB
@@ -74,11 +76,33 @@
             this.btExecute.UseVisualStyleBackColor = true;
             this.btExecute.Click += new System.EventHandler(this.btExecute_Click);
             // 
+            // btDBFilling
+            // 
+            this.btDBFilling.Location = new System.Drawing.Point(93, 42);
+            this.btDBFilling.Name = "btDBFilling";
+            this.btDBFilling.Size = new System.Drawing.Size(75, 23);
+            this.btDBFilling.TabIndex = 4;
+            this.btDBFilling.Text = "DB filling";
+            this.btDBFilling.UseVisualStyleBackColor = true;
+            this.btDBFilling.Click += new System.EventHandler(this.btDBFilling_Click);
+            // 
+            // btClearResult
+            // 
+            this.btClearResult.Location = new System.Drawing.Point(175, 42);
+            this.btClearResult.Name = "btClearResult";
+            this.btClearResult.Size = new System.Drawing.Size(75, 23);
+            this.btClearResult.TabIndex = 5;
+            this.btClearResult.Text = "Clear Result";
+            this.btClearResult.UseVisualStyleBackColor = true;
+            this.btClearResult.Click += new System.EventHandler(this.btClearResult_Click);
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(292, 273);
+            this.Controls.Add(this.btClearResult);
+            this.Controls.Add(this.btDBFilling);
             this.Controls.Add(this.btExecute);
             this.Controls.Add(this.btRun);
             this.Controls.Add(this.btInitDB);
@@ -95,6 +119,8 @@
         private System.Windows.Forms.Button btInitDB;
         private System.Windows.Forms.Button btRun;
         private System.Windows.Forms.Button btExecute;
+        private System.Windows.Forms.Button btDBFilling;
+        private System.Windows.Forms.Button btClearResult;
     }
 }
 

@@ -44,5 +44,19 @@ namespace Evolution3
             double[] incomePar = new double[]{6, 12.0, 3.0, 4.0};
             MessageBox.Show(execute.Run(incomePar).ToString());
         }
+
+        private void btDBFilling_Click(object sender, EventArgs e)
+        {
+            DBFilling filling = new DBFilling();
+
+            filling.Filling();
+        }
+
+        private void btClearResult_Click(object sender, EventArgs e)
+        {
+            DBFilling filling = new DBFilling();
+
+            filling.ClearResult();
+        }
     }
 }
