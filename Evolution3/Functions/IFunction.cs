@@ -6,24 +6,8 @@ using System.Threading.Tasks;
 
 namespace Functions
 {
-    public interface IFunction
+    public interface IFunction : IBaseFunc
     {
-        Guid Id { get; }
-        /// <summary>
-        /// Название функции
-        /// </summary>
-        string Name { get; }
-
-        /// <summary>
-        /// Число параметров
-        /// </summary>
-        int ParamCount { get; }
-
-        /// <summary>
-        /// Коммутативность и ассоциативность функции
-        /// </summary>
-        bool Commutativity { get; }
-
         /// <summary>
         /// 
         /// </summary>

@@ -50,12 +50,20 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArrayCopy.cs" />
+    <Compile Include="BaseFuncSet.cs" />
+    <Compile Include="ConditionAllDecisions.cs" />
+    <Compile Include="ConditionBetterRes.cs" />
+    <Compile Include="ConditionDecision.cs" />
+    <Compile Include="ConditionSet.cs" />
+    <Compile Include="ConditionVariant.cs" />
+    <Compile Include="ConditionVariantResult.cs" />
     <Compile Include="FunctionBetterRes.cs" />
     <Compile Include="FunctionSet.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Run.cs" />
     <Compile Include="Setup.cs" />
-    <Compile Include="Step0.cs" />
+    <Compile Include="StepCondition.cs" />
+    <Compile Include="StepFunctions.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Calculation\Calculation.csproj">

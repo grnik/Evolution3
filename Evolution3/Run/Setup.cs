@@ -14,7 +14,7 @@ namespace Run
         {
             return new Calculat();
         }
-        public static ISetParam GetISetParam(IFunction function, int countParamsIncome)
+        public static ISetParam GetISetParam(IBaseFunc function, int countParamsIncome)
         {
             return new SetParam(function, countParamsIncome);
         }

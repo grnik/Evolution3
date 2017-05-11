@@ -23,6 +23,8 @@ namespace DataDB
         public DbSet<Setup> Setups { get; set; }
         public DbSet<RunResult> RunResults { get; set; }
         public DbSet<RunResultParam> RunResultParams { get; set; }
+        public DbSet<RunCondition> RunConditions { get; set; }
+        public DbSet<RunConditionParam> RunConditionParams { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -41,6 +43,10 @@ namespace DataDB
             modelBuilder.Entity<RunResult>().HasKey(p => p.Id);
             modelBuilder.Entity<RunResultParam>().HasKey(p => p.Id);
             modelBuilder.Entity<RunResult>().HasMany(p => p.Parameters).WithRequired(p => p.RunResult).HasForeignKey(p => p.RunResultId);
+            modelBuilder.Entity<RunResult>().HasMany(p => p.Conditions).WithRequired(p => p.RunResult).HasForeignKey(p => p.RunResultId);
+            modelBuilder.Entity<RunCondition>().HasKey(p => p.Id);
+            modelBuilder.Entity<RunConditionParam>().HasKey(p => p.Id);
+            modelBuilder.Entity<RunCondition>().HasMany(p => p.Parameters).WithRequired(p => p.RunCondition).HasForeignKey(p => p.RunConditionId);
 
             base.OnModelCreating(modelBuilder);
         }

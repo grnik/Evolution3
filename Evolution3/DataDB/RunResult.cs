@@ -43,7 +43,15 @@ SELECT RR.[Id]
         /// </summary>
         public double Result { get; set; }
         public ICollection<RunResultParam> Parameters { get; set; }
+        public ICollection<RunCondition> Conditions { get; set; }
+        /// <summary>
+        /// Шаг выполнения
+        /// </summary>
         public int Level { get; set; }
+        /// <summary>
+        /// Порядок проверки условий.
+        /// </summary>
+        public int? OrderCondition { get; set; }
         /// <summary>
         /// В какой параметр записываем результат
         /// </summary>

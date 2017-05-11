@@ -8,7 +8,7 @@ namespace Functions
 {
     public class FPlus : IFunction
     {
-        Guid IFunction.Id
+        public Guid Id
         {
             get
             {
@@ -16,7 +16,7 @@ namespace Functions
             }
         }
 
-        string IFunction.Name
+        public string Name
         {
             get { return "Plus"; }
         }
@@ -31,7 +31,7 @@ namespace Functions
             get { return true; }
         }
 
-        double IFunction.Run(params double[] paramInput)
+        public double Run(params double[] paramInput)
         {
             if (paramInput.Length != ParamCount)
                 throw new Exception("Число переданных параметров не соответствует числу параметров функции.");

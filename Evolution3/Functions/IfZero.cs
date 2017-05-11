@@ -6,19 +6,22 @@ using System.Threading.Tasks;
 
 namespace Functions
 {
-    public class FPlus1 : IFunction
+    /// <summary>
+    /// Сравнение с 0
+    /// </summary>
+    public class IfZero : IIf
     {
         public Guid Id
         {
             get
             {
-                return new Guid("2367E8E9-82CE-47A9-8E63-830C1EA160E8");
+                return new Guid("81DCE1BC-9D5E-4322-9889-49EFC9836723");
             }
         }
 
         public string Name
         {
-            get { return "Plus1"; }
+            get { return "Zero"; }
         }
 
         public int ParamCount
@@ -31,12 +34,12 @@ namespace Functions
             get { return true; }
         }
 
-        public double Run(params double[] paramInput)
+        public int Run(params double[] paramInput)
         {
             if (paramInput.Length != ParamCount)
                 throw new Exception("Число переданных параметров не соответствует числу параметров функции.");
 
-            return paramInput[0] + 1;
+            return Convert.ToInt32(CompareDouble.Compare(paramInput[0], 0));
         }
     }
 }

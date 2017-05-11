@@ -66,17 +66,23 @@ namespace Run
         public double Search()
         {
             Guid idRun = Guid.NewGuid();
-            Step0 step0 = new Step0(_setup, _calculation);
+            StepFunctions stepFunctions = new StepFunctions(_calculation);
+            StepCondition stepCondition = new StepCondition(_calculation);
             int level = 0;
             do
             {
-                double bettCorr = step0.Run(_incomeVariants, _results, level);
+                double bettCorr = stepFunctions.Run(_incomeVariants, _results);
+                //int indexForChange = stepFunctions.GetIndexChange(_incomeVariants);
+                stepFunctions.SaveResult(idRun, level, null);
+
+                //Проверка условий.
+                stepCondition.Run(_incomeVariants, _results);
+                stepCondition.SaveResult(idRun, level);
 
                 //Изменяем входные параметры на новые.
-                int indexForChange = GetIndexChange(_incomeVariants, step0.FunctionBetter[step0.BetterCorrelationIndex].BetterResult);
-                ChangeIncomeVariants(ref _incomeVariants, step0.FunctionBetter[step0.BetterCorrelationIndex].BetterResult, indexForChange);
-
-                SaveResult(idRun, step0, bettCorr, level, indexForChange);
+                if (!stepFunctions.IndexChange.HasValue)
+                    throw new Exception("Не определен индекс выходного параметра для функции");
+                ChangeIncomeVariants(ref _incomeVariants, stepFunctions.FunctionBetter[stepFunctions.BetterCorrelationIndex].BetterResult, stepFunctions.IndexChange.Value);
 
                 if ((level >= _setup.MaxLevel) || (bettCorr > _setup.TargetCorrelation))
                 {
@@ -84,69 +90,6 @@ namespace Run
                 }
                 level++;
             } while (true);
-        }
-
-        /// <summary>
-        /// Сохраняем результат выполнения.
-        /// </summary>
-        /// <param name="runGuid">Идентификатор данного выполнения.</param>
-        /// <param name="step"></param>
-        /// <param name="bettCorr"></param>
-        /// <param name="level"></param>
-        private void SaveResult(Guid runGuid, Step0 step, double bettCorr, int level, int indexForChange)
-        {
-            using (EvoluationContext context = new EvoluationContext())
-            {
-                RunResult result = new RunResult();
-                result.Id = Guid.NewGuid();
-                result.RunId = runGuid;
-                FunctionBetterRes functionBetter = step.FunctionBetter[step.BetterCorrelationIndex];
-                result.Function = functionBetter.Function.Name;
-                result.RunTime = DateTime.Now;
-                result.Result = bettCorr;
-                result.Level = level;
-                result.IndexOut = indexForChange;
-                result.StandardDeviation = functionBetter.StandardDeviation;
-                context.RunResults.Add(result);
-                for (int i = 0; i < functionBetter.Function.ParamCount; i++)
-                {
-                    RunResultParam param = new RunResultParam();
-                    param.Id = Guid.NewGuid();
-                    param.RunResult = result;
-                    param.OrderParam = i;
-                    param.IndexParam = functionBetter.BetterReshuffle[i];
-                    context.RunResultParams.Add(param);
-                }
-
-                context.SaveChanges();
-            }
-        }
-
-        /// <summary>
-        /// Определяем какой входной параметр заменить. 
-        /// Индекс входного параметра с наибольшей корреляцией с результатом.
-        /// </summary>
-        /// <param name="incomVariants"></param>
-        /// <param name="betterResult"></param>
-        /// <returns>Индекс входного параметра для замены.</returns>
-        private int GetIndexChange(double[,] incomVariants, double[] betterResult)
-        {
-            int count = incomVariants.GetLength(1);
-            //double[] correlations = new double[count];
-            double bestCorr = 0;
-            int bestIndex = 0;
-
-            for (int i = 0; i < count; i++)
-            {
-                double correlation = Math.Abs(_calculation.Correlation(ArrayCopy.GetArrayTo2Index(incomVariants, 1), betterResult));
-                if (correlation > bestCorr)
-                {
-                    bestIndex = i;
-                    bestCorr = correlation;
-                }
-            }
-
-            return bestIndex;
         }
 
 

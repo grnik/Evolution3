@@ -6,37 +6,38 @@ using System.Threading.Tasks;
 
 namespace Functions
 {
-    public class FPlus1 : IFunction
+    //Сравниваем два значения
+    public class IfCompare : IIf
     {
         public Guid Id
         {
             get
             {
-                return new Guid("2367E8E9-82CE-47A9-8E63-830C1EA160E8");
+                return new Guid("A4D0903C-DBCF-4281-8916-A2FF011D2ED3");
             }
         }
 
         public string Name
         {
-            get { return "Plus1"; }
+            get { return "Compare"; }
         }
 
         public int ParamCount
         {
-            get { return 1; }
+            get { return 2; }
         }
 
         public bool Commutativity
         {
-            get { return true; }
+            get { return false; }
         }
 
-        public double Run(params double[] paramInput)
+        public int Run(params double[] paramInput)
         {
             if (paramInput.Length != ParamCount)
                 throw new Exception("Число переданных параметров не соответствует числу параметров функции.");
 
-            return paramInput[0] + 1;
+            return Convert.ToInt32(CompareDouble.Compare(paramInput[0], paramInput[1]));
         }
     }
 }

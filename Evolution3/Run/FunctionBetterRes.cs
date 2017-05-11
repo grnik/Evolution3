@@ -22,6 +22,9 @@ namespace Run
         /// </summary>
         public int BetterIndexReshuffle { get; private set; }
         public int[] BetterReshuffle { get; private set; }
+        /// <summary>
+        /// Лучший результат выполения.
+        /// </summary>
         public double[] BetterResult { get; private set; }
         /// <summary>
         /// Все результаты выполнения.
@@ -48,7 +51,10 @@ namespace Run
         /// <summary>
         /// Ищем лучшую корреляцию по входным параметрам.
         /// </summary>
-        /// <param name="incomeVariants"></param>
+        /// <param name="incomeVariants">
+        /// Первое измерение - номер варианта
+        /// Второе измерение - индекс 
+        /// </param>
         /// <param name="results"></param>
         /// <returns></returns>
         public double Better(double[,] incomeVariants, double[] results)
@@ -62,7 +68,7 @@ namespace Run
             AllResultsRun = new double[count, _setParam.CountReshuffle];
             for (int i = 0; i < count; i++)
             {
-                double[] incomeParam = FunctionSet.GetOwnSetIncomeParams(incomeVariants, i);
+                double[] incomeParam = BaseFuncSet.GetOwnSetIncomeParams(incomeVariants, i);
                 double[,] incomeSetParams = _setParam.GetSet(incomeParam);
                 double[] resultForSet = _functionSet.Run(incomeSetParams);
                 if (_setParam.CountReshuffle != resultForSet.Length)
@@ -95,11 +101,11 @@ namespace Run
             for (int i = 0; i < Correlation.Length; i++)
             {
                 //Если корреляция совпадает, то выбираем решение с наименьшим среднеквадратичным отклонением.
-                if (CompareDouble(Math.Abs(Correlation[i]), res) == 0)
+                if (BaseFuncSet.CompareDouble(Math.Abs(Correlation[i]), res) == 0)
                 {
                     double[] resultsRun = ArrayCopy.GetArrayTo2Index(AllResultsRun, i);
                     double stDev = GetStandardDeviation(results, resultsRun);
-                    if (CompareDouble(stDev, StandardDeviation) < 0)
+                    if (BaseFuncSet.CompareDouble(stDev, StandardDeviation) < 0)
                     {
                         res = Math.Abs(Correlation[i]);
                         BetterIndexReshuffle = i;
@@ -119,29 +125,6 @@ namespace Run
             BetterReshuffle = ArrayCopy.GetArrayTo1Index(_setParam.Reshuffle, BetterIndexReshuffle);
 
             return res;
-        }
-
-        /// <summary>
-        /// Возвращает результат сравнения.
-        /// 1- d1 > d2
-        /// -1 - d1 < d2
-        /// 0 - d1 = d2
-        /// Nan - один из операторов NaN
-        /// </summary>
-        /// <param name="d1"></param>
-        /// <param name="d2"></param>
-        /// <returns></returns>
-        public static double CompareDouble(double d1, double d2)
-        {
-            //Точность сравнения.
-            const double precision = 1E-7;
-
-            if (Double.IsNaN(d1) || Double.IsNaN(d2))
-                return Double.NaN;
-            if (Math.Abs(d1 - d2) < precision)
-                return 0;
-
-            return d1 > d2 ? 1 : -1;
         }
 
         /// <summary>

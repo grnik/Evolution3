@@ -40,14 +40,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CompareDouble.cs" />
     <Compile Include="FFactory.cs" />
     <Compile Include="FMinus1.cs" />
     <Compile Include="FMultiplication.cs" />
     <Compile Include="FPlus1.cs" />
     <Compile Include="FDivision.cs" />
+    <Compile Include="IBaseFunc.cs" />
+    <Compile Include="IfCompare.cs" />
+    <Compile Include="IfFactory.cs" />
     <Compile Include="IFunction.cs" />
     <Compile Include="FPlus.cs" />
     <Compile Include="FMinus.cs" />
+    <Compile Include="IfZero.cs" />
+    <Compile Include="IIf.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

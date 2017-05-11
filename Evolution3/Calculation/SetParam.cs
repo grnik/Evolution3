@@ -27,20 +27,26 @@ namespace Calculation
             }
         }
 
+        /// <summary>
+        /// Массив с перестановками всех параметров.
+        /// Первое измерение - индекс возможных вариантов перестановки
+        /// Второе - номер входного параметра функции.
+        /// Значение - индекс из входных параметров.
+        /// </summary>
         public int[,] Reshuffle
         {
             get { return _reshuffleParam.Reshuffle; }
         }
 
         private int _countParamsIncome;
-        private IFunction _function;
+        private IBaseFunc _function;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="function">Функция, которую будем оценивать</param>
         /// <param name="countParamsIncome">Количество входных параметров.</param>
-        public SetParam(IFunction function, int countParamsIncome)
+        public SetParam(IBaseFunc function, int countParamsIncome)
         {
             _function = function;
             _countParamsIncome = countParamsIncome;
@@ -62,7 +68,10 @@ namespace Calculation
         /// По набору входных параметров создаем наборы для выполнения функции
         /// </summary>
         /// <param name="paramsIncome"></param>
-        /// <returns></returns>
+        /// <returns>
+        /// Первый параметр - вариант набора параметров
+        /// Второй параметр - номер параметра функции
+        /// </returns>
         public double[,] GetSet(double[] paramsIncome)
         {
             int countParamsIncome = paramsIncome.Length;

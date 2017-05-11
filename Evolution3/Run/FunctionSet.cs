@@ -39,7 +39,7 @@ namespace Run
 
             for (int i = 0; i < length; i++)
             {
-                double[] funcParams = GetOwnSetIncomeParams(inputParams, i);
+                double[] funcParams = BaseFuncSet.GetOwnSetIncomeParams(inputParams, i);
                 res[i] = _function.Run(funcParams);
             }
 
@@ -73,24 +73,6 @@ namespace Run
         public double Correlation(double[] compareResults, double[] resultFunc)
         {
             return _calculation.Correlation(compareResults, resultFunc);
-        }
-
-        /// <summary>
-        /// Копируем конкретный набор входных параметров из списка вариантов.
-        /// </summary>
-        /// <param name="setParams"></param>
-        /// <param name="index"></param>
-        /// <returns></returns>
-        public static double[] GetOwnSetIncomeParams(double[,] setParams, int index)
-        {
-            int count = setParams.GetLength(1);
-            double[] res = new double[count];
-            for (int i = 0; i < count; i++)
-            {
-                res[i] = setParams[index, i];
-            }
-
-            return res;
         }
     }
 }
