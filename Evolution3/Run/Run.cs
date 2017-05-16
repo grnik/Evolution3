@@ -101,6 +101,7 @@ namespace Run
         /// <param name="index"></param>
         private static void ChangeIncomeVariants(ref double[,] incomVariants, double[] forChangeArray, int index)
         {
+            //TODO: Сделать, что если результат не коррелирует ни с одним параметром, то добавлять новый параметр.
             int count = incomVariants.GetLength(0);
             if (count != forChangeArray.Length)
                 throw new Exception("Размерность входных параметров и результата на замену - не совпадает");

@@ -15,7 +15,7 @@ namespace DataDB
         public Guid Id { get; set; }
         public Guid RunResultId { get; set; }
         public RunResult RunResult { get; set; }
-        public ICollection<RunConditionParam> Parameters { get; set; }
+        public virtual ICollection<RunConditionParam> Parameters { get; set; }
         public string Condition { get; set; }
         /// <summary>
         /// Результат при котором выполняется данное условие.

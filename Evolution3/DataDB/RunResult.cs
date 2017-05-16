@@ -42,8 +42,8 @@ SELECT RR.[Id]
         /// Корреляция данной функции
         /// </summary>
         public double Result { get; set; }
-        public ICollection<RunResultParam> Parameters { get; set; }
-        public ICollection<RunCondition> Conditions { get; set; }
+        public virtual ICollection<RunResultParam> Parameters { get; set; }
+        public virtual ICollection<RunCondition> Conditions { get; set; }
         /// <summary>
         /// Шаг выполнения
         /// </summary>

@@ -42,7 +42,7 @@ namespace Evolution3
         {
             Execute.Execute execute = new Execute.Execute();
             double[] incomePar = new double[]{6, 12.0, 3.0, 4.0};
-            MessageBox.Show(execute.Run(incomePar).ToString());
+            MessageBox.Show(execute.Run(ref incomePar).ToString());
         }
 
         private void btDBFilling_Click(object sender, EventArgs e)

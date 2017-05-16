@@ -20,7 +20,7 @@ namespace Run
         private readonly List<IIf> _conditions;
 
         /// <summary>
-        /// Для каждого набора входных параметров (получившихся из условий) ищем решение.
+        /// Для каждого набора входных параметров (получившихся из условий) ищем лучшее решение.
         /// </summary>
         public StepFunctions[] StepFunctions { get; private set; }
 
