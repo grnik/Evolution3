@@ -22,5 +22,28 @@ namespace DataDB
         /// </summary>
         public int Result { get; set; }
 
+        /// <summary>
+        /// Сохраняем данные
+        /// </summary>
+        /// <param name="context"></param>
+        public void Save(EvoluationContext context)
+        {
+            RunCondition runResult = context.RunConditions.FirstOrDefault(r => r.Id == Id);
+            if (runResult == null)
+            {
+                context.RunConditions.Add(this);
+            }
+            else
+            {
+                runResult.RunResultId = RunResultId;
+                runResult.RunResult = RunResult;
+                runResult.Condition = Condition;
+                runResult.Result = Result;
+            }
+            foreach (RunConditionParam runResultParam in Parameters)
+            {
+                runResultParam.Save(context);
+            }
+        }
     }
 }

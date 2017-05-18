@@ -21,5 +21,24 @@ namespace DataDB
         /// </summary>
         public int IndexParam { get; set; }
 
+        /// <summary>
+        /// Сохраняем данные
+        /// </summary>
+        /// <param name="context"></param>
+        public void Save(EvoluationContext context)
+        {
+            RunResultParam runResult = context.RunResultParams.FirstOrDefault(r => r.Id == Id);
+            if (runResult == null)
+            {
+                context.RunResultParams.Add(this);
+            }
+            else
+            {
+                runResult.RunResultId = RunResultId;
+                runResult.RunResult = RunResult;
+                runResult.OrderParam = OrderParam;
+                runResult.IndexParam = IndexParam;
+            }
+        }
     }
 }

@@ -29,16 +29,14 @@ namespace Run
         public double BetterCorrelation { get; private set; }
 
         /// <summary>
-        /// Какой входной параметр менять результатом выполнения функции.
-        /// Определяем самый близкий (по корреляции) параметр к результату и меняем его.
+        /// Результат расчета
         /// </summary>
-        public int? IndexChange { get; private set; }
+        public RunResult RunResult { get; private set; }
 
         public StepFunctions(ICalculation calculation)
         {
             _calculation = calculation;
             _functions = FFactory.AllFunction();
-            IndexChange = null;
         }
 
         /// <summary>
@@ -50,10 +48,11 @@ namespace Run
         /// </param>
         /// <param name="results"></param>
         /// Массив известных решений
+        /// <param name="runGuid"></param>
+        /// <param name="level"></param>
         /// <returns></returns>
-        public double Run(double[,] incomVariants, double[] results)
+        public double Run(double[,] incomVariants, double[] results, Guid runGuid, int level)
         {
-            IndexChange = null;
             int count = _functions.Count;
             int countIncomeParams = incomVariants.GetLength(1);
             double[] betterCorrelations = new double[count];
@@ -76,82 +75,77 @@ namespace Run
                 }
             }
 
-            GetIndexChange(incomVariants);
-
+            SetRunResult(runGuid, level);
             return BetterCorrelation;
         }
 
-        /// <summary>
-        /// Определяем какой входной параметр заменить. 
-        /// Индекс входного параметра с наибольшей корреляцией с результатом.
-        /// </summary>
-        /// <param name="incomVariants"></param>
-        /// <param name="betterResult"></param>
-        /// <returns>Индекс входного параметра для замены.</returns>
-        private void GetIndexChange(double[,] incomVariants)
+        private void SetRunResult(Guid runGuid, int level)
         {
-            double[] betterResult = FunctionBetter[BetterCorrelationIndex].BetterResult;
-
-            int count = incomVariants.GetLength(1);
-            double bestCorr = 0;
-            int bestIndex = 0;
-
-            for (int i = 0; i < count; i++)
+            RunResult = new RunResult();
+            RunResult.Id = Guid.NewGuid();
+            RunResult.RunId = runGuid;
+            FunctionBetterRes functionBetter = FunctionBetter[BetterCorrelationIndex];
+            RunResult.Function = functionBetter.Function.Name;
+            RunResult.RunTime = DateTime.Now;
+            RunResult.Result = BetterCorrelation;
+            RunResult.Level = level;
+            //result.OrderCondition = orderCondition;
+            //if (!indexChange.HasValue)
+            //    throw new NotImplementedException("При малой корреляции с входным параметром - сделать не замену. а добавление параметра.");
+            //RunResult.IndexOut = indexChange.Value;
+            RunResult.StandardDeviation = functionBetter.StandardDeviation;
+            RunResult.Parameters = new List<RunResultParam>();
+            for (int i = 0; i < functionBetter.Function.ParamCount; i++)
             {
-                double correlation = Math.Abs(_calculation.Correlation(ArrayCopy.GetArrayTo2Index(incomVariants, 1), betterResult));
-                if (correlation > bestCorr)
-                {
-                    bestIndex = i;
-                    bestCorr = correlation;
-                }
-            }
+                RunResultParam param = new RunResultParam();
+                param.Id = Guid.NewGuid();
+                param.RunResult = RunResult;
+                param.OrderParam = i;
+                param.IndexParam = functionBetter.BetterReshuffle[i];
 
-            IndexChange = bestIndex;
+                RunResult.Parameters.Add(param);
+            }
         }
 
         /// <summary>
         /// Сохраняем результат выполнения.
         /// </summary>
-        /// <param name="runGuid">Идентификатор данного выполнения.</param>
-        /// <param name="level"></param>
+        /// <param name="indexChange">Номер входного параметра для замены. Не определен - новый параметр</param>
         /// <param name="orderCondition"></param>
         /// <returns>RunResult</returns>
-        public RunResult SaveResult(Guid runGuid, int level, int? orderCondition)
+        public RunResult SaveResult(int? indexChange, int? orderCondition)
         {
             using (EvoluationContext context = new EvoluationContext())
             {
-                return SaveResult(context, runGuid, level, orderCondition);
+                return SaveResult(context, indexChange, orderCondition);
             }
         }
-        internal RunResult SaveResult(EvoluationContext context, Guid runGuid, int level, int? orderCondition)
+
+        internal RunResult SaveResult(EvoluationContext context, int? indexChange, int? orderCondition)
         {
-            RunResult result = new RunResult();
-            result.Id = Guid.NewGuid();
-            result.RunId = runGuid;
+            RunResult.OrderCondition = orderCondition;
+            if (!indexChange.HasValue)
+                throw new NotImplementedException("При малой корреляции с входным параметром - сделать не замену. а добавление параметра.");
+            RunResult.IndexOut = indexChange.Value;
             FunctionBetterRes functionBetter = FunctionBetter[BetterCorrelationIndex];
-            result.Function = functionBetter.Function.Name;
-            result.RunTime = DateTime.Now;
-            result.Result = BetterCorrelation;
-            result.Level = level;
-            result.OrderCondition = orderCondition;
-            if (!IndexChange.HasValue)
-                throw new Exception("Не определен индекс выходного параметра для функции.");
-            result.IndexOut = IndexChange.Value;
-            result.StandardDeviation = functionBetter.StandardDeviation;
-            context.RunResults.Add(result);
-            for (int i = 0; i < functionBetter.Function.ParamCount; i++)
+            context.RunResults.Add(RunResult);
+            //for (int i = 0; i < functionBetter.Function.ParamCount; i++)
+            //{
+            //    RunResultParam param = new RunResultParam();
+            //    param.Id = Guid.NewGuid();
+            //    param.RunResult = RunResult;
+            //    param.OrderParam = i;
+            //    param.IndexParam = functionBetter.BetterReshuffle[i];
+            //    context.RunResultParams.Add(param);
+            //}
+            foreach (RunResultParam param in RunResult.Parameters)
             {
-                RunResultParam param = new RunResultParam();
-                param.Id = Guid.NewGuid();
-                param.RunResult = result;
-                param.OrderParam = i;
-                param.IndexParam = functionBetter.BetterReshuffle[i];
                 context.RunResultParams.Add(param);
             }
 
             context.SaveChanges();
 
-            return result;
+            return RunResult;
         }
 
     }

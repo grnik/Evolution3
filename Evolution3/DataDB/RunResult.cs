@@ -58,5 +58,38 @@ SELECT RR.[Id]
         public int IndexOut { get; set; }
 
         public double StandardDeviation { get; set; }
+
+        /// <summary>
+        /// Сохраняем данные
+        /// </summary>
+        /// <param name="context"></param>
+        public void Save(EvoluationContext context)
+        {
+            RunResult runResult = context.RunResults.FirstOrDefault(r => r.Id == Id);
+            if (runResult == null)
+            {
+                context.RunResults.Add(this);
+            }
+            else
+            {
+                runResult.RunId = RunId;
+                runResult.RunTime = RunTime;
+                runResult.Function = Function;
+                runResult.Result = Result;
+                runResult.Level = Level;
+                runResult.OrderCondition = OrderCondition;
+                runResult.IndexOut = IndexOut;
+                runResult.StandardDeviation = StandardDeviation;
+            }
+            foreach (RunResultParam runResultParam in Parameters)
+            {
+                runResultParam.Save(context);
+            }
+            if (Conditions != null)
+                foreach (RunCondition runCondition in Conditions)
+                {
+                    runCondition.Save(context);
+                }
+        }
     }
 }

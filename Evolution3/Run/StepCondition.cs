@@ -35,6 +35,11 @@ namespace Run
         public double[] Correlation { get; private set; }
         public ConditionBetterRes[] ConditionBetterRes { get; private set; }
 
+        /// <summary>
+        /// Результат поиска решения
+        /// </summary>
+        public List<RunResult> RunResults { get; private set; }
+
         public StepCondition(ICalculation calculation)
         {
             _calculation = calculation;
@@ -50,8 +55,10 @@ namespace Run
         /// </param>
         /// <param name="results"></param>
         /// Массив известных решений
+        /// <param name="runGuid"></param>
+        /// <param name="level"></param>
         /// <returns></returns>
-        public void Run(double[,] incomVariants, double[] results)
+        public void Run(double[,] incomVariants, double[] results, Guid runGuid, int level)
         {
             int count = _conditions.Count;
             int countIncomeParams = incomVariants.GetLength(1);
@@ -66,8 +73,9 @@ namespace Run
             }
 
             //Для каждого набора входных параметров ищем лучшее решение.
-            CalculatCorrelation(incomVariants, results);
+            CalculatCorrelation(incomVariants, results, runGuid, level);
 
+            SetRunResults();
             //Выбираем лучшее решение
             //double bettCorr = betterCorrelations[0];
             //BetterCorrelationIndex = 0;
@@ -88,7 +96,9 @@ namespace Run
         /// </summary>
         /// <param name="incomVariants"></param>
         /// <param name="results"></param>
-        private void CalculatCorrelation(double[,] incomVariants, double[] results)
+        /// <param name="runGuid"></param>
+        /// <param name="level"></param>
+        private void CalculatCorrelation(double[,] incomVariants, double[] results, Guid runGuid, int level)
         {
             int countDecision = Decisions.Decisions.Count;
             StepFunctions = new StepFunctions[countDecision];
@@ -98,7 +108,7 @@ namespace Run
                 double[,] partIncomeVariants = GetPartIncomeVariants(Decisions.Decisions[i].Decision, incomVariants);
                 double[] partResults = GetPartResults(Decisions.Decisions[i].Decision, results);
                 StepFunctions[i] = new StepFunctions(_calculation);
-                Correlation[i] = StepFunctions[i].Run(partIncomeVariants, partResults);
+                Correlation[i] = StepFunctions[i].Run(partIncomeVariants, partResults, runGuid, level);
             }
         }
 
@@ -158,31 +168,28 @@ namespace Run
             return res;
         }
 
-
-        /// <summary>
-        /// Сохраняем результат выполнения.
-        /// </summary>
-        /// <param name="runGuid">Идентификатор данного выполнения.</param>
-        /// <param name="level"></param>
-        public void SaveResult(Guid runGuid, int level)
+        private void SetRunResults()
         {
+            RunResults = new List<RunResult>();
             int countDecision = Decisions.Decisions.Count;
             if (countDecision != StepFunctions.Length)
                 throw new Exception("Число решений в AllDecision и StepRun должно совпадать");
-            using (EvoluationContext context = new EvoluationContext())
             {
                 for (int i = 0; i < countDecision; i++)
                 {
-                    RunResult runResult = StepFunctions[i].SaveResult(context, runGuid, level, i);
+                    RunResult runResult = StepFunctions[i].RunResult;//StepFunctions[i].SaveResult(context, indexChange, i);
+                    runResult.Conditions = new List<RunCondition>();
+                    RunResults.Add(runResult);
 
                     foreach (ConditionVariantResult conditionVariantResult in Decisions.Decisions[i].ConditionVariantResults)
                     {
                         RunCondition runCondition = new RunCondition();
                         runCondition.Id = Guid.NewGuid();
+                        runCondition.Parameters = new List<RunConditionParam>();
                         runCondition.RunResult = runResult;
                         runCondition.Condition = conditionVariantResult.ConditionVariant.Condition.Name;
                         runCondition.Result = conditionVariantResult.Result;
-                        context.RunConditions.Add(runCondition);
+                        runResult.Conditions.Add(runCondition);
                         if (conditionVariantResult.ConditionVariant.IndexParams.Length
                             != conditionVariantResult.ConditionVariant.Condition.ParamCount)
                             throw new Exception("Число параметров условия и число индексов использованных не совпадает");
@@ -196,14 +203,36 @@ namespace Run
                                 OrderParam = k,
                                 IndexParam = conditionVariantResult.ConditionVariant.IndexParams[k]
                             };
-                            context.RunConditionParams.Add(param);
+                            runCondition.Parameters.Add(param);
                         }
                     }
                 }
-
-                context.SaveChanges();
             }
         }
 
+
+        /// <summary>
+        /// Сохраняем результат выполнения.
+        /// </summary>
+        /// <param name="indexChange"></param>
+        public List<RunResult> SaveResult(int? indexChange)
+        {
+            if (!indexChange.HasValue)
+                throw new NotImplementedException("При малой корреляции с входным параметром - сделать не замену. а добавление параметра. StepCondition");
+            int countDecision = Decisions.Decisions.Count;
+            if (countDecision != StepFunctions.Length)
+                throw new Exception("Число решений в AllDecision и StepRun должно совпадать");
+            using (EvoluationContext context = new EvoluationContext())
+            {
+                foreach (RunResult runResult in RunResults)
+                {
+                    runResult.IndexOut = indexChange.Value;
+                    runResult.Save(context);
+                }
+                 context.SaveChanges();
+            }
+
+            return RunResults;
+        }
     }
 }

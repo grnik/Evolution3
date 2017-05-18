@@ -17,7 +17,7 @@ namespace Run
     {
         /// <summary>
         /// Первое измерение - номер варианта
-        /// Второе измерение - индекс 
+        /// Второе измерение - индекс конкретного значения параметра в варианте
         /// </summary>
         private double[,] _incomeVariants;
         private double[] _results;
@@ -69,27 +69,65 @@ namespace Run
             StepFunctions stepFunctions = new StepFunctions(_calculation);
             StepCondition stepCondition = new StepCondition(_calculation);
             int level = 0;
-            do
+            using (EvoluationContext context = new EvoluationContext())
             {
-                double bettCorr = stepFunctions.Run(_incomeVariants, _results);
-                //int indexForChange = stepFunctions.GetIndexChange(_incomeVariants);
-                stepFunctions.SaveResult(idRun, level, null);
-
-                //Проверка условий.
-                stepCondition.Run(_incomeVariants, _results);
-                stepCondition.SaveResult(idRun, level);
-
-                //Изменяем входные параметры на новые.
-                if (!stepFunctions.IndexChange.HasValue)
-                    throw new Exception("Не определен индекс выходного параметра для функции");
-                ChangeIncomeVariants(ref _incomeVariants, stepFunctions.FunctionBetter[stepFunctions.BetterCorrelationIndex].BetterResult, stepFunctions.IndexChange.Value);
-
-                if ((level >= _setup.MaxLevel) || (bettCorr > _setup.TargetCorrelation))
+                do
                 {
-                    return bettCorr;// = Run(_incomeVariants, results, level + 1);
-                }
-                level++;
-            } while (true);
+                    double bettCorr = stepFunctions.Run(_incomeVariants, _results, idRun, level);
+                    //int indexForChange = stepFunctions.GetIndexChange(_incomeVariants);
+                    List<RunResult> runResultsLevel = new List<RunResult>() { stepFunctions.RunResult };
+
+                    //Проверка условий.
+                    stepCondition.Run(_incomeVariants, _results, idRun, level);
+                    runResultsLevel.AddRange(stepCondition.RunResults);
+
+                    double[] resultLevel = CalcResultLevel(runResultsLevel, _incomeVariants);
+
+                    int indexForChange = GetIndexChange(_incomeVariants, resultLevel);
+
+                    SaveResult(context, runResultsLevel);
+
+                    //Изменяем входные параметры на новые.
+                    ChangeIncomeVariants(ref _incomeVariants, resultLevel, indexForChange);
+
+                    if ((level >= _setup.MaxLevel) || (bettCorr > _setup.TargetCorrelation))
+                    {
+                        return bettCorr;// = Run(_incomeVariants, results, level + 1);
+                    }
+                    level++;
+                } while (true);
+            }
+        }
+
+        private void SaveResult(EvoluationContext context, List<RunResult> runResultsLevel)
+        {
+            foreach (RunResult runResult in runResultsLevel)
+            {
+                runResult.Save(context);
+            }
+            context.SaveChanges();
+        }
+
+        /// <summary>
+        /// Для данного списка решений ищем ответы по входным параметрам.
+        /// </summary>
+        /// <param name="runResultsLevel"></param>
+        /// <param name="_incomeVariants"></param>
+        /// <returns></returns>
+        private double[] CalcResultLevel(List<RunResult> runResultsLevel, double[,] incomeVariants)
+        {
+            int countRes = incomeVariants.GetLength(0);
+            if (_results.Length != countRes)
+                throw new Exception("Число входных параметров и число известных ответов - должны совпадать.");
+
+            double[] res = new double[countRes];
+            for (int i = 0; i < countRes; i++)
+            {
+                double[] incomeVariant = ArrayCopy.GetArrayTo1Index(incomeVariants, i);
+                res[i] = Execute.Execute.RunResults(runResultsLevel.ToArray(), ref incomeVariant);
+            }
+
+            return res;
         }
 
 
@@ -110,5 +148,35 @@ namespace Run
                 incomVariants[i, index] = forChangeArray[i];
             }
         }
+
+        //TODO: Расмотреть возможность добавить параметр, если корреляция с входными параметрами не слишком большая.
+        /// <summary>
+        /// Определяем какой входной параметр заменить. 
+        /// Индекс входного параметра с наибольшей корреляцией с результатом.
+        /// </summary>
+        /// <param name="incomVariants">Наборы входных параметров</param>
+        /// <param name="betterResult">Результат расчета для набора входных параметров</param>
+        /// <returns>Индекс входного параметра для замены.</returns>
+        private int GetIndexChange(double[,] incomVariants, double[] betterResult)
+        {
+            int count = incomVariants.GetLength(0);
+            if (count != betterResult.Length)
+                throw new Exception("Число входных параметров и результатов не совпадает");
+            double bestCorr = 0;
+            int bestIndex = 0;
+
+            for (int i = 0; i < incomVariants.GetLength(1); i++)
+            {
+                double correlation = Math.Abs(_calculation.Correlation(ArrayCopy.GetArrayTo2Index(incomVariants, i), betterResult));
+                if (correlation > bestCorr)
+                {
+                    bestIndex = i;
+                    bestCorr = correlation;
+                }
+            }
+
+            return bestIndex;
+        }
+
     }
 }
