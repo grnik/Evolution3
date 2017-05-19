@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Data.SqlTypes;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -65,6 +67,11 @@ SELECT RR.[Id]
         /// <param name="context"></param>
         public void Save(EvoluationContext context)
         {
+            if(Double.IsPositiveInfinity(Result))
+                Result = SqlDouble.MaxValue.Value;
+            if (Double.IsNegativeInfinity(Result))
+                Result = SqlDouble.MinValue.Value;
+
             RunResult runResult = context.RunResults.FirstOrDefault(r => r.Id == Id);
             if (runResult == null)
             {
