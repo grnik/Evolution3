@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Calculation;
 using DataDB;
 using Functions;
+using Ninject;
 
 namespace Run
 {
@@ -15,6 +16,8 @@ namespace Run
     /// </summary>
     public class Run
     {
+        private static IKernel AppKernel = new StandardKernel(new NinjectConfig());
+
         /// <summary>
         /// Первое измерение - номер варианта
         /// Второе измерение - индекс конкретного значения параметра в варианте
@@ -28,7 +31,8 @@ namespace Run
         //Считываем данные из БД
         public Run()
         {
-            _calculation = Setup.GetICalculation();
+            //_calculation = Setup.GetICalculation();
+            _calculation = AppKernel.Get<ICalculation>();
             using (EvoluationContext context = new EvoluationContext())
             {
                 _setup = context.Setups.First();

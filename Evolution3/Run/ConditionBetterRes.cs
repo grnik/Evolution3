@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Calculation;
 using Functions;
+using Ninject;
+using Ninject.Parameters;
 
 namespace Run
 {
@@ -13,6 +15,8 @@ namespace Run
     /// </summary>
     public class ConditionBetterRes
     {
+        private static IKernel AppKernel = new StandardKernel(new NinjectConfig());
+
         public IIf Condition { get; private set; }
         private readonly int _countParamsIncome;
         private readonly ConditionSet _conditionSet;
@@ -42,7 +46,14 @@ namespace Run
         {
             Condition = condition;
             _countParamsIncome = countParamsIncome;
-            SetParam = Setup.GetISetParam(condition, countParamsIncome);
+            //SetParam = Setup.GetISetParam(condition, countParamsIncome);
+            //transactionService = AppKernel.Get<ITransactionService>(new[] {
+            //    new ConstructorArgument("repositories", repositories) });
+            SetParam = AppKernel.Get<ISetParam>(new[]
+            {
+                new ConstructorArgument("function", condition),
+                new ConstructorArgument("countParamsIncome", countParamsIncome)
+            });
             _conditionSet = new ConditionSet(condition);
         }
 

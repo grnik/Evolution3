@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Calculat.cs" />
+    <Compile Include="CalculateForex.cs" />
     <Compile Include="ICalculation.cs" />
     <Compile Include="ISetParam.cs" />
     <Compile Include="ReshuffleParam.cs" />

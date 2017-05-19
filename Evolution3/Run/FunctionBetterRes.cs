@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Calculation;
 using Functions;
+using Ninject;
+using Ninject.Parameters;
 
 namespace Run
 {
@@ -13,6 +15,8 @@ namespace Run
     /// </summary>
     public class FunctionBetterRes
     {
+        private static IKernel AppKernel = new StandardKernel(new NinjectConfig());
+
         public IFunction Function { get; }
         private ISetParam _setParam;
         private int _countParamsIncome;
@@ -44,7 +48,12 @@ namespace Run
         {
             Function = function;
             _countParamsIncome = countParamsIncome;
-            _setParam = Setup.GetISetParam(function, countParamsIncome);
+            //_setParam = Setup.GetISetParam(function, countParamsIncome);
+            _setParam = AppKernel.Get<ISetParam>(new[]
+            {
+                new ConstructorArgument("function", function),
+                new ConstructorArgument("countParamsIncome", countParamsIncome)
+            });
             _functionSet = new FunctionSet(function, calculation);
         }
 
